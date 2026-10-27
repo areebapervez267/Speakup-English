@@ -84,11 +84,10 @@ export function ForgotPasswordForm({ configured }: { configured: boolean }) {
   return (
     <div>
       <h2 className="text-2xl font-bold tracking-[-0.02em] text-brand-navy">
-        Reset your password
+        Send a reset link
       </h2>
       <p className="mt-1.5 text-sm leading-6 text-brand-body">
-        Enter the email you used to sign up. We will send a secure, time-limited
-        reset link.
+        Use the email address on your account.
       </p>
 
       {!configured ? (

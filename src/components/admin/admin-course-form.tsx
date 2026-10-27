@@ -61,8 +61,8 @@ export function AdminCourseForm({
               Course identity
             </h2>
             <p className="mt-1 text-sm leading-6 text-brand-body">
-              The title and URL students see in the catalogue and on course
-              pages.
+              The title and URL students see in the course library and on
+              course pages.
             </p>
           </div>
           {slugLocked ? (
@@ -186,8 +186,8 @@ export function AdminCourseForm({
       <section className={cn(adminCardClass, "p-5 sm:p-6")}>
         <h2 className="text-lg font-bold text-brand-navy">Classification</h2>
         <p className="mt-1 text-sm leading-6 text-brand-body">
-          Level and skill control catalogue filters. Free and premium labels do
-          not process payments — they only describe access.
+          Level and skill control course library filters. Free and premium
+          labels do not process payments — they only describe access.
         </p>
 
         <fieldset disabled={locked} className="mt-5 grid gap-5 sm:grid-cols-2">

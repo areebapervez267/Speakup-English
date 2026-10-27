@@ -24,10 +24,9 @@ export default function SignupPage() {
           <span className="italic text-brand-teal-deep">SpeakUp</span> account
         </>
       }
-      description="Keep your sign-in details in one place with a student account. A1–B2 courses remain free, and we never ask for payment information."
+      description="One student account for every course and CEFR level. A1–B2 courses stay free, and we never ask for card details."
       points={[
-        "One account for every course and CEFR level.",
-        "A1–B2 courses stay free — no card required.",
+        "Your progress, quiz results and certificates stay in one place.",
         "We only ask for your name and email address.",
         "Email confirmation keeps your account secure.",
       ]}

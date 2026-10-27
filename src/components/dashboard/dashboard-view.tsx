@@ -114,8 +114,8 @@ export function DashboardView({
             </div>
 
             <p className="mt-4 max-w-xl text-sm leading-6 text-white/70 sm:text-base sm:leading-7">
-              Your lesson completion and quiz attempts are saved to your student
-              account. Pick up where you left off, or review how you are doing.
+              Everything on this page is tied to your account, so you can pick
+              up on any device.
             </p>
 
             <div className="mt-5 border-t border-white/10 pt-4">
@@ -138,7 +138,7 @@ export function DashboardView({
               ) : (
                 <p className="text-sm leading-6 text-white/70">
                   You have completed every interactive lesson available. Explore
-                  the catalogue to plan your next course.
+                  the course library to plan your next course.
                 </p>
               )}
             </div>
@@ -232,7 +232,7 @@ export function DashboardView({
             href="/courses"
             className="inline-flex items-center gap-1.5 rounded-full text-xs font-semibold text-brand-body transition-colors hover:text-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal focus-visible:ring-offset-2"
           >
-            Browse catalogue
+            Browse courses
             <ArrowRight className="size-3.5" aria-hidden="true" />
           </Link>
         </div>
@@ -474,7 +474,7 @@ function CourseProgressCard({ course }: { course: DashboardCourse }) {
           </span>
         ) : (
           <span className="rounded-full border border-brand-line bg-white px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.12em] text-brand-body">
-            {level.label} · {skill.label}
+            In progress
           </span>
         )}
       </div>

@@ -107,7 +107,7 @@ export function SignupForm({ configured }: { configured: boolean }) {
       <div className="flex items-start justify-between gap-3">
         <div>
           <h2 className="text-2xl font-bold tracking-[-0.02em] text-brand-navy">
-            Create your account
+            Join SpeakUp
           </h2>
           <p className="mt-1.5 text-sm leading-6 text-brand-body">
             It takes less than a minute. No card required.

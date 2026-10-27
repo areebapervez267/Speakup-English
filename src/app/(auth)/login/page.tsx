@@ -25,10 +25,10 @@ export default function LoginPage() {
           <span className="italic text-brand-teal-deep">SpeakUp</span>
         </>
       }
-      description="Sign in with the email you used to create your account. Your session is stored in secure cookies and verified on the server."
+      description="Log in with the email you used to create your account."
       points={[
-        "Use the email address linked to your account.",
-        "Your session is verified on the server, not just in the browser.",
+        "Your progress, quiz results and certificates stay tied to this account.",
+        "Your session is stored in secure cookies and verified on the server.",
         "Forgot your password? Request a secure reset link any time.",
       ]}
     >

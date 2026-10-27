@@ -51,7 +51,7 @@ export function ResetPasswordForm({ email }: { email: string }) {
   return (
     <div>
       <h2 className="text-2xl font-bold tracking-[-0.02em] text-brand-navy">
-        Choose a new password
+        New password
       </h2>
       <p className="mt-1.5 text-sm leading-6 text-brand-body">
         You are resetting the password for{" "}

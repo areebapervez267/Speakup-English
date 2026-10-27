@@ -19,9 +19,9 @@ export default function ForgotPasswordPage() {
     <AuthShell
       eyebrow="Account recovery"
       title="Reset your password"
-      description="Enter your account email and we will send a secure link to choose a new password. Reset links are single-use and time-limited."
+      description="Enter your account email and we will send a secure link to choose a new password."
       points={[
-        "The reset link is sent only to the address on your account.",
+        "Reset links are single-use and time-limited.",
         "The link opens a protected page for choosing a new password.",
         "After the change, your other signed-in devices are signed out.",
       ]}

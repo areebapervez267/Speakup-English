@@ -89,8 +89,7 @@ export function CertificatesPanel({
         </div>
       ) : overview.rows.length === 0 ? (
         <p className="mt-5 rounded-xl bg-brand-mist/70 px-4 py-3 text-sm leading-6 text-brand-body">
-          No certificate policies are registered yet. Apply the Phase 9
-          certificate migration to enable this section.
+          Certificates are not enabled yet. Check back later.
         </p>
       ) : (
         <ul className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">

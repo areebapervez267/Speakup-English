@@ -232,7 +232,7 @@ async function AccountContent({
             href="/courses"
             className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand-teal-deep underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:text-brand-navy"
           >
-            Explore the catalogue
+            Explore the course library
             <ArrowRight className="size-4" aria-hidden="true" />
           </Link>
         </section>

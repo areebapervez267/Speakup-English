@@ -25,11 +25,11 @@ export default function NotFound() {
             404 · Page not found
           </p>
           <h1 className="mt-3 text-balance font-display text-3xl font-medium leading-tight tracking-[-0.02em] text-brand-navy sm:text-4xl">
-            This page isn’t in the course library.
+            We couldn’t find that page.
           </h1>
           <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-brand-body">
-            The link may be out of date, or the course or lesson may not exist
-            yet. Everything that is available is listed in the course library.
+            The link may be out of date, or the page may have moved. Everything
+            that is available is listed in the course library.
           </p>
 
           <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">

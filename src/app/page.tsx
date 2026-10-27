@@ -247,8 +247,7 @@ export default function Home() {
                 Your next level
               </p>
               <h2 className="mx-auto mt-4 max-w-3xl text-balance font-display text-4xl font-medium leading-[1.05] tracking-[-0.025em] text-white sm:text-5xl lg:text-[3.5rem]">
-                Learn English.{" "}
-                <span className="italic text-white/75">Build confidence.</span>
+                Ready when you are.
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-white/60 sm:text-base">
                 Six CEFR levels. Seven connected skills. Start free and build a

@@ -81,10 +81,10 @@ export function LoginForm({ configured }: { configured: boolean }) {
   return (
     <div>
       <h2 className="text-2xl font-bold tracking-[-0.02em] text-brand-navy">
-        Welcome back
+        Log in
       </h2>
       <p className="mt-1.5 text-sm leading-6 text-brand-body">
-        Sign in to open your student account.
+        Enter your email and password to continue.
       </p>
 
       {!configured ? (

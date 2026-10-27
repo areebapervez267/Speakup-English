@@ -18,7 +18,7 @@ const faqs = [
   {
     question: "How do I choose the right CEFR level?",
     answer:
-      "Read the level descriptions on this page and start with the one that sounds most like what you can already do. If two levels feel close, begin with the lower one — each Level A1 through C2 builds on the one before it.",
+      "Read the level descriptions on this page and start with the one that sounds most like what you can already do. If two levels feel close, begin with the lower one — each level from A1 to C2 builds on the one before it.",
   },
   {
     question: "What does each course actually cover?",
