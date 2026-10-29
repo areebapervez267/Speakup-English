@@ -144,10 +144,10 @@ function expectError(result, expectedCode, label) {
     `${label}: expected the database to reject the request, but it succeeded.`,
   );
   assert(
-    result.error.code === expectedCode,
+    result.error?.code === expectedCode,
     `${label}: expected error code ${expectedCode}, received ${
-      result.error.code ?? "none"
-    } (${result.error.message}). This can also mean the migrations are out of date.`,
+      result.error?.code ?? "none"
+    } (${result.error?.message}). This can also mean the migrations are out of date.`,
   );
 }
 
@@ -155,8 +155,8 @@ function expectEmpty(result, label) {
   assert(
     !result.error,
     `${label}: expected an isolated empty result, received error ${
-      result.error.code ?? "unknown"
-    } (${result.error.message}).`,
+      result.error?.code ?? "unknown"
+    } (${result.error?.message}).`,
   );
   assert(
     Array.isArray(result.data) && result.data.length === 0,
@@ -167,8 +167,8 @@ function expectEmpty(result, label) {
 function expectRows(result, label) {
   assert(
     !result.error,
-    `${label}: request failed with ${result.error.code ?? "unknown"} (${
-      result.error.message
+    `${label}: request failed with ${result.error?.code ?? "unknown"} (${
+      result.error?.message
     }). Check the migrations and grants.`,
   );
   assert(

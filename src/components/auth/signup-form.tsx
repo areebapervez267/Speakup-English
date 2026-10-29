@@ -84,6 +84,9 @@ export function SignupForm({ configured }: { configured: boolean }) {
           The link opens a secure confirmation page. Once confirmed, you can
           sign in and visit your account.
         </p>
+        <p className="mt-3 text-sm leading-6 text-brand-body">
+          Cannot find the email? Please also check your Spam or Junk folder.
+        </p>
         <div className="mt-6 flex flex-col gap-3">
           <Link
             href="/login"

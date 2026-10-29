@@ -63,6 +63,9 @@ export function ForgotPasswordForm({ configured }: { configured: boolean }) {
           The link returns you to a secure page where you can choose a new
           password. For your security, it can only be used once.
         </p>
+        <p className="mt-3 text-sm leading-6 text-brand-body">
+          Cannot find the email? Please also check your Spam or Junk folder.
+        </p>
         <div className="mt-6 flex flex-col gap-3">
           <Link
             href="/login"
