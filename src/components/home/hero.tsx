@@ -66,13 +66,14 @@ export function Hero() {
                 <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
               <Link
-                href="/#levels"
+                href="/level-test"
                 className={cn(
                   buttonVariants({ variant: "outline", size: "lg" }),
-                  "h-12 w-full justify-center rounded-full border-brand-line bg-white px-6 text-[0.95rem] font-semibold text-brand-navy hover:bg-brand-mist sm:w-auto",
+                  "h-12 w-full justify-center gap-2 rounded-full border-brand-line bg-white px-6 text-[0.95rem] font-semibold text-brand-navy hover:bg-brand-mist sm:w-auto",
                 )}
               >
-                Explore CEFR levels
+                Find my level (3 min)
+                <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
             </div>
 

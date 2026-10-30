@@ -9,15 +9,16 @@ export const brand = {
 
 export const primaryNav = [
   { label: "Courses", href: "/courses" },
+  { label: "Level test", href: "/level-test" },
   { label: "Blog", href: "/blog" },
   { label: "Premium", href: "/premium" },
   { label: "Levels", href: "/#levels" },
-  { label: "Method", href: "/#method" },
 ] as const;
 
 export const footerNav = {
   explore: [
     { label: "All courses", href: "/courses" },
+    { label: "Free English level test", href: "/level-test" },
     { label: "Blog", href: "/blog" },
     { label: "Premium membership", href: "/premium" },
     { label: "CEFR levels", href: "/#levels" },
