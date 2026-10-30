@@ -22,7 +22,7 @@ export const a1ListeningMeta = {
     "Use a simple listening strategy to catch the information you need.",
   ],
   practiceNote: {
-    title: "Listening without audio",
-    text: "Audio playback is not available in this version. Every listening lesson gives a full transcript with a clear label. Read it once, cover it, then answer the questions from memory. You can also read the transcript aloud or ask a partner to read one speaker's lines.",
+    title: "Listening practice with audio",
+    text: "Press the ▶ button on any transcript line to hear it spoken, or use Play transcript to hear the whole conversation. Tap Slow for a slower voice. Listen first, then cover the text and answer the questions from memory. Repeat each line aloud, or ask a partner to read one speaker's lines.",
   },
 };

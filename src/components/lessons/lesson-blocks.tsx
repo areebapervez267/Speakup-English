@@ -11,12 +11,34 @@ import {
 } from "lucide-react";
 
 import { LessonExercise } from "@/components/lessons/lesson-exercise";
+import {
+  AudioRateToggle,
+  SpeakButton,
+  SpeakPill,
+} from "@/components/lessons/lesson-audio";
 import type { LessonBlock } from "@/data/lessons/types";
 import { cn } from "@/lib/utils";
 
+function joinForReading(lines: readonly string[]) {
+  return lines
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .join(". ");
+}
+
 export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
   return (
-    <div className="space-y-9">
+    <div>
+      <div className="flex items-center justify-end gap-2.5 pb-5">
+        <p className="mr-auto text-xs leading-5 text-brand-body">
+          <span className="font-semibold text-brand-teal-deep">
+            Tap ▶ to hear it
+          </span>{" "}
+          — spoken by your browser, free and offline.
+        </p>
+        <AudioRateToggle />
+      </div>
+      <div className="space-y-9">
       {blocks.map((block, index) => {
         switch (block.type) {
           case "text":
@@ -83,9 +105,9 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                   {block.items.map((item, itemIndex) => (
                     <li
                       key={itemIndex}
-                      className="rounded-xl border border-brand-line bg-white py-3.5 pl-4 pr-4 shadow-sm sm:pl-5"
+                      className="flex items-start gap-3 rounded-xl border border-brand-line bg-white py-3.5 pl-4 pr-4 shadow-sm sm:pl-5"
                     >
-                      <div className="border-l-2 border-brand-teal pl-3.5">
+                      <div className="min-w-0 flex-1 border-l-2 border-brand-teal pl-3.5">
                         <p className="text-[0.95rem] font-medium leading-6 text-brand-navy">
                           {item.text}
                         </p>
@@ -95,6 +117,11 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                           </p>
                         )}
                       </div>
+                      <SpeakButton
+                        text={item.text}
+                        label={`Listen to: ${item.text}`}
+                        className="mt-0.5"
+                      />
                     </li>
                   ))}
                 </ul>
@@ -245,27 +272,39 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                 aria-labelledby={`passage-${index}`}
                 className="overflow-hidden rounded-3xl border border-brand-line bg-white shadow-sm"
               >
-                <header className="border-b border-brand-line bg-brand-mist/70 px-5 py-4 sm:px-6">
-                  <p className="flex items-center gap-1.5 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-brand-teal-deep">
-                    <BookOpen className="size-3.5" aria-hidden="true" />
-                    Reading passage
-                  </p>
-                  <h2
-                    id={`passage-${index}`}
-                    className="mt-1.5 text-balance font-display text-2xl font-medium leading-snug tracking-[-0.02em] text-brand-navy"
+                <header className="flex flex-wrap items-start justify-between gap-3 border-b border-brand-line bg-brand-mist/70 px-5 py-4 sm:px-6">
+                  <div className="min-w-0">
+                    <p className="flex items-center gap-1.5 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-brand-teal-deep">
+                      <BookOpen className="size-3.5" aria-hidden="true" />
+                      Reading passage
+                    </p>
+                    <h2
+                      id={`passage-${index}`}
+                      className="mt-1.5 text-balance font-display text-2xl font-medium leading-snug tracking-[-0.02em] text-brand-navy"
+                    >
+                      {block.title}
+                    </h2>
+                  </div>
+                  <SpeakPill
+                    text={joinForReading(block.paragraphs)}
+                    label="Listen to the whole passage"
                   >
-                    {block.title}
-                  </h2>
+                    Play passage
+                  </SpeakPill>
                 </header>
                 <div className="px-5 py-5 sm:px-6">
                   <div className="space-y-4">
                     {block.paragraphs.map((paragraph, paragraphIndex) => (
-                      <p
-                        key={paragraphIndex}
-                        className="text-pretty text-[0.95rem] leading-7 text-brand-ink"
-                      >
-                        {paragraph}
-                      </p>
+                      <div key={paragraphIndex} className="flex gap-3">
+                        <p className="min-w-0 flex-1 text-pretty text-[0.95rem] leading-7 text-brand-ink">
+                          {paragraph}
+                        </p>
+                        <SpeakButton
+                          text={paragraph}
+                          label={`Listen to paragraph ${paragraphIndex + 1}`}
+                          className="mt-0.5"
+                        />
+                      </div>
                     ))}
                   </div>
 
@@ -280,8 +319,12 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                             key={word.term}
                             className="flex flex-col gap-0.5 text-sm leading-6 sm:flex-row sm:gap-2"
                           >
-                            <dt className="shrink-0 font-semibold text-brand-navy">
+                            <dt className="flex shrink-0 items-center gap-2 font-semibold text-brand-navy">
                               {word.term}
+                              <SpeakButton
+                                text={word.term}
+                                label={`Listen to: ${word.term}`}
+                              />
                             </dt>
                             <dd className="text-brand-body">
                               {word.meaning}
@@ -298,13 +341,23 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
           case "wordbank":
             return (
               <section key={index}>
-                <p className="flex items-center gap-1.5 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-brand-teal-deep">
-                  <BookMarked className="size-3.5" aria-hidden="true" />
-                  Word bank
-                </p>
-                <h2 className="mt-1.5 font-display text-2xl font-medium leading-snug tracking-[-0.02em] text-brand-navy sm:text-[1.75rem]">
-                  {block.title}
-                </h2>
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="flex items-center gap-1.5 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-brand-teal-deep">
+                      <BookMarked className="size-3.5" aria-hidden="true" />
+                      Word bank
+                    </p>
+                    <h2 className="mt-1.5 font-display text-2xl font-medium leading-snug tracking-[-0.02em] text-brand-navy sm:text-[1.75rem]">
+                      {block.title}
+                    </h2>
+                  </div>
+                  <SpeakPill
+                    text={block.words.map((word) => word.term).join(", ")}
+                    label="Listen to every word in this list"
+                  >
+                    Play all words
+                  </SpeakPill>
+                </div>
                 {block.intro && (
                   <p className="mt-2 text-sm leading-6 text-brand-body">
                     {block.intro}
@@ -317,16 +370,29 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                       key={word.term}
                       className="rounded-2xl border border-brand-line bg-white p-4 shadow-sm"
                     >
-                      <dt className="text-base font-bold text-brand-navy">
-                        {word.term}
-                      </dt>
+                      <div className="flex items-start justify-between gap-3">
+                        <dt className="text-base font-bold text-brand-navy">
+                          {word.term}
+                        </dt>
+                        <SpeakButton
+                          text={word.term}
+                          label={`Listen to: ${word.term}`}
+                        />
+                      </div>
                       <dd className="mt-1 text-sm leading-6 text-brand-body">
                         {word.meaning}
                       </dd>
                       {word.example && (
-                        <dd className="mt-2.5 border-l-2 border-brand-teal pl-3 text-sm leading-6 text-brand-ink">
-                          <span className="sr-only">Example: </span>
-                          {word.example}
+                        <dd className="mt-2.5 flex items-start gap-2.5 border-l-2 border-brand-teal pl-3">
+                          <p className="min-w-0 flex-1 text-sm leading-6 text-brand-ink">
+                            <span className="sr-only">Example: </span>
+                            {word.example}
+                          </p>
+                          <SpeakButton
+                            text={word.example}
+                            label={`Listen to the example for ${word.term}`}
+                            className="mt-0.5"
+                          />
                         </dd>
                       )}
                     </div>
@@ -342,16 +408,26 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                 aria-labelledby={`dialogue-${index}`}
                 className="rounded-3xl border border-brand-line bg-brand-mist/50 p-5 sm:p-6"
               >
-                <p className="flex items-center gap-1.5 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-brand-teal-deep">
-                  <MessagesSquare className="size-3.5" aria-hidden="true" />
-                  Model dialogue
-                </p>
-                <h2
-                  id={`dialogue-${index}`}
-                  className="mt-1.5 font-display text-2xl font-medium leading-snug tracking-[-0.02em] text-brand-navy"
-                >
-                  {block.title}
-                </h2>
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="flex items-center gap-1.5 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-brand-teal-deep">
+                      <MessagesSquare className="size-3.5" aria-hidden="true" />
+                      Model dialogue
+                    </p>
+                    <h2
+                      id={`dialogue-${index}`}
+                      className="mt-1.5 font-display text-2xl font-medium leading-snug tracking-[-0.02em] text-brand-navy"
+                    >
+                      {block.title}
+                    </h2>
+                  </div>
+                  <SpeakPill
+                    text={joinForReading(block.lines.map((line) => line.text))}
+                    label="Listen to the whole dialogue"
+                  >
+                    Play dialogue
+                  </SpeakPill>
+                </div>
                 {block.intro && (
                   <p className="mt-2 text-sm leading-6 text-brand-body">
                     {block.intro}
@@ -361,14 +437,21 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                   {block.lines.map((line, lineIndex) => (
                     <li
                       key={lineIndex}
-                      className="rounded-2xl border border-brand-line bg-white px-4 py-3 shadow-sm"
+                      className="flex items-start gap-3 rounded-2xl border border-brand-line bg-white px-4 py-3 shadow-sm"
                     >
-                      <p className="text-[0.6rem] font-bold uppercase tracking-[0.12em] text-brand-teal-deep">
-                        {line.speaker}
-                      </p>
-                      <p className="mt-1 text-sm leading-6 text-brand-ink">
-                        {line.text}
-                      </p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[0.6rem] font-bold uppercase tracking-[0.12em] text-brand-teal-deep">
+                          {line.speaker}
+                        </p>
+                        <p className="mt-1 text-sm leading-6 text-brand-ink">
+                          {line.text}
+                        </p>
+                      </div>
+                      <SpeakButton
+                        text={line.text}
+                        label={`Listen to ${line.speaker}`}
+                        className="mt-0.5"
+                      />
                     </li>
                   ))}
                 </ol>
@@ -383,14 +466,17 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                 className="overflow-hidden rounded-3xl border border-brand-line bg-white shadow-sm"
               >
                 <header className="border-b border-brand-line bg-brand-navy px-5 py-4 text-white sm:px-6">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
                     <p className="flex items-center gap-1.5 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-brand-teal">
                       <Headphones className="size-3.5" aria-hidden="true" />
                       Listening transcript
                     </p>
-                    <span className="rounded-full border border-white/20 bg-white/5 px-2.5 py-1 text-[0.55rem] font-bold uppercase tracking-[0.1em] text-white/70">
-                      No audio in this version
-                    </span>
+                    <SpeakPill
+                      text={joinForReading(block.lines.map((line) => line.text))}
+                      label="Listen to the whole transcript"
+                    >
+                      Play transcript
+                    </SpeakPill>
                   </div>
                   <h2
                     id={`transcript-${index}`}
@@ -401,9 +487,12 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                 </header>
                 <div className="px-5 py-5 sm:px-6">
                   <p className="rounded-xl bg-brand-mist px-3.5 py-2.5 text-xs leading-5 text-brand-body">
-                    This is a transcript-based activity. Read the transcript
-                    once, then cover it and answer the questions. Audio playback
-                    is not included.
+                    Press ▶ to hear a line, then cover the text and answer the
+                    questions from what you heard. Use{" "}
+                    <span className="font-semibold text-brand-teal-deep">
+                      Slow
+                    </span>{" "}
+                    for a slower voice.
                   </p>
                   {block.context && (
                     <p className="mt-3 text-sm leading-6 text-brand-body">
@@ -414,7 +503,7 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                     {block.lines.map((line, lineIndex) => (
                       <li
                         key={lineIndex}
-                        className="grid gap-1 border-l-2 border-brand-line pl-3.5 sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-3"
+                        className="grid gap-1 border-l-2 border-brand-line pl-3.5 sm:grid-cols-[7rem_minmax(0,1fr)_auto] sm:gap-3"
                       >
                         <p className="text-[0.62rem] font-bold uppercase tracking-[0.1em] text-brand-teal-deep">
                           {line.speaker}
@@ -422,6 +511,11 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                         <p className="text-sm leading-6 text-brand-ink">
                           {line.text}
                         </p>
+                        <SpeakButton
+                          text={line.text}
+                          label={`Listen to ${line.speaker}`}
+                          className="mt-0.5 justify-self-start sm:justify-self-end"
+                        />
                       </li>
                     ))}
                   </ol>
@@ -443,7 +537,7 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                       Sound focus
                     </p>
                     <span className="rounded-full border border-brand-line bg-white px-2.5 py-1 text-[0.55rem] font-bold uppercase tracking-[0.1em] text-brand-body">
-                      Written guide only
+                      Audio + written guide
                     </span>
                   </div>
                   <h2
@@ -466,26 +560,42 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                         key={word.word}
                         className="rounded-2xl border border-brand-line bg-brand-mist/40 p-4"
                       >
-                        <div className="flex items-baseline justify-between gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           <p className="text-base font-bold text-brand-navy">
                             {word.word}
                           </p>
-                          <span className="rounded-full bg-white px-2.5 py-0.5 text-xs font-semibold text-brand-teal-deep shadow-sm">
+                          <SpeakButton
+                            text={word.word}
+                            label={`Listen to: ${word.word}`}
+                          />
+                          <span className="ml-auto rounded-full bg-white px-2.5 py-0.5 text-xs font-semibold text-brand-teal-deep shadow-sm">
                             {word.respelling}
                           </span>
                         </div>
                         {word.example && (
-                          <p className="mt-2 text-sm leading-6 text-brand-body">
-                            {word.example}
-                          </p>
+                          <div className="mt-2 flex items-start gap-2.5">
+                            <p className="min-w-0 flex-1 text-sm leading-6 text-brand-body">
+                              {word.example}
+                            </p>
+                            <SpeakButton
+                              text={word.example}
+                              label={`Listen to the example for ${word.word}`}
+                              className="mt-0.5"
+                            />
+                          </div>
                         )}
                       </li>
                     ))}
                   </ul>
                   <p className="mt-4 text-xs leading-5 text-brand-body">
-                    This guide uses written respellings. The site does not play
-                    audio or assess your pronunciation; repeat each word aloud
-                    at your own pace.
+                    Press ▶ to hear each word in your browser&apos;s English
+                    voice — try{" "}
+                    <span className="font-semibold text-brand-teal-deep">
+                      Slow
+                    </span>{" "}
+                    first, then repeat it aloud at normal speed. The written
+                    respellings are a backup; the site does not record or assess
+                    your pronunciation.
                   </p>
                 </div>
               </section>
@@ -505,6 +615,7 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
             return null;
         }
       })}
+      </div>
     </div>
   );
 }

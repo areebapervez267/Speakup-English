@@ -22,7 +22,7 @@ export const a1PronunciationMeta = {
     "Identify the sounds that need extra practice in your own speech.",
   ],
   practiceNote: {
-    title: "Written pronunciation guide only",
-    text: "This version does not play audio or analyse your pronunciation. Each lesson uses written descriptions, IPA symbols and respellings so you can practise at your own pace. Speak aloud, use a mirror to check mouth position, and ask a teacher or partner for feedback if you can.",
+    title: "Hear the sound, then say it",
+    text: "Each lesson pairs written descriptions, IPA symbols and respellings with a ▶ Play button, so you can hear the word before you copy it. Tap Slow for a careful model, then repeat at normal speed. Use a mirror to check mouth position. The site does not record or score your voice, so a teacher or partner is still the best feedback.",
   },
 };
