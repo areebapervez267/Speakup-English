@@ -12,7 +12,12 @@ import {
 } from "lucide-react";
 
 import { PremiumCheckoutButton } from "@/components/premium/premium-checkout-button";
+import { ManualPaymentPanel } from "@/components/premium/manual-payment-panel";
 import { buttonVariants } from "@/components/ui/button";
+import {
+  isManualCheckoutReady,
+  manualPayments,
+} from "@/config/manual-payments";
 import { freeCourseCount, premiumCourseCount } from "@/data/courses";
 import { getPremiumAccess } from "@/lib/premium/access";
 import { getPaymentsDisplay } from "@/lib/premium/config";
@@ -81,6 +86,9 @@ export default async function PremiumPage({ searchParams }: PremiumPageProps) {
     searchParams,
   ]);
   const display = getPaymentsDisplay();
+  const manualReady = isManualCheckoutReady();
+  const priceLabel =
+    display.priceLabel ?? (manualReady ? manualPayments.priceLabel : null);
   const summary = membershipSummary(access);
   const membership = access.membership;
   const active = access.active;
@@ -184,12 +192,14 @@ export default async function PremiumPage({ searchParams }: PremiumPageProps) {
                 </div>
 
                 <p className="mt-5 font-display text-[2.6rem] leading-none text-white sm:text-5xl">
-                  {display.priceLabel ?? "Price to be announced"}
+                  {priceLabel ?? "Price to be announced"}
                 </p>
                 <p className="mt-2 text-sm text-white/55">
-                  {display.priceLabel
+                  {display.checkoutReady
                     ? "Charged through the payment provider's hosted checkout."
-                    : "The price will be published here before checkout opens. Nothing is charged today."}
+                    : manualReady
+                      ? "Bank transfer inside Pakistan. Access is opened by an administrator once the payment is verified."
+                      : "The price will be published here before checkout opens. Nothing is charged today."}
                 </p>
 
                 <div className="my-6 border-t border-white/10" />
@@ -244,6 +254,19 @@ export default async function PremiumPage({ searchParams }: PremiumPageProps) {
                         Checkout is linked to your student account so access can
                         be granted securely.
                       </p>
+                    </div>
+                  ) : manualReady ? (
+                    <div className="space-y-3">
+                      {!access.signedIn ? (
+                        <Link
+                          href={loginHref}
+                          className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-brand-teal px-5 text-sm font-semibold text-brand-navy transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
+                        >
+                          Log in to start
+                          <ArrowRight className="size-4" aria-hidden="true" />
+                        </Link>
+                      ) : null}
+                      <ManualPaymentPanel settings={manualPayments} />
                     </div>
                   ) : (
                     <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
