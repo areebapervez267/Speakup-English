@@ -9,6 +9,7 @@ export const brand = {
 
 export const primaryNav = [
   { label: "Courses", href: "/courses" },
+  { label: "Blog", href: "/blog" },
   { label: "Premium", href: "/premium" },
   { label: "Levels", href: "/#levels" },
   { label: "Method", href: "/#method" },
@@ -17,6 +18,7 @@ export const primaryNav = [
 export const footerNav = {
   explore: [
     { label: "All courses", href: "/courses" },
+    { label: "Blog", href: "/blog" },
     { label: "Premium membership", href: "/premium" },
     { label: "CEFR levels", href: "/#levels" },
     { label: "Our method", href: "/#method" },
