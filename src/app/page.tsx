@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -22,6 +23,11 @@ import {
   totalCourses,
 } from "@/data/courses";
 import { cn } from "@/lib/utils";
+import { pageCanonical } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  ...pageCanonical("/"),
+};
 
 const stats = [
   { label: "CEFR levels, A1–C2", value: String(cefrLevels.length) },

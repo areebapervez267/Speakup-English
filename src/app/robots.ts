@@ -1,8 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const baseUrl = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://speakup-english-pwv7.vercel.app"
-).replace(/\/+$/, "");
+import { siteUrl as baseUrl } from "@/config/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {

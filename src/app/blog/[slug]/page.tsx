@@ -4,10 +4,16 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Clock3 } from "lucide-react";
 
 import { BlogPostCard } from "@/components/blog/blog-post-card";
+import { JsonLd } from "@/components/seo/json-ld";
 import { LessonContent } from "@/components/lessons/lesson-blocks";
 import { SectionHeading } from "@/components/section-heading";
 import { getBlogPost, getBlogPostSlugs, getBlogPosts } from "@/data/blog";
 import { resolveCourseDetail } from "@/lib/content/published";
+import {
+  blogPostingSchema,
+  breadcrumbSchema,
+  pageCanonical,
+} from "@/lib/seo";
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
@@ -37,7 +43,9 @@ export async function generateMetadata({
       description: post.description,
       type: "article",
       publishedTime: post.date,
+      url: `/blog/${post.slug}`,
     },
+    ...pageCanonical(`/blog/${post.slug}`),
   };
 }
 
@@ -64,6 +72,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <div className="site-container py-12 lg:py-16">
+      <JsonLd
+        data={[
+          blogPostingSchema(post),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Blog", path: "/blog" },
+            { name: post.title, path: `/blog/${post.slug}` },
+          ]),
+        ]}
+      />
       <div className="mx-auto max-w-3xl">
         <Link
           href="/blog"

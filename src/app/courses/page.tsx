@@ -9,6 +9,7 @@ import {
 } from "@/components/courses/course-catalog";
 import { cefrLevels, skills } from "@/data/curriculum";
 import { getCatalogCourses } from "@/lib/content/published";
+import { pageCanonical } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const catalog = await getCatalogCourses();
@@ -16,6 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "English courses A1–C2",
     description: `Explore ${catalog.length} CEFR-aligned English courses across grammar, listening, speaking, pronunciation, vocabulary, reading and writing. A1–B2 are free; C1–C2 are part of Premium.`,
+    ...pageCanonical("/courses"),
   };
 }
 

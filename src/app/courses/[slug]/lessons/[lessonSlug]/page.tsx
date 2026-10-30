@@ -20,6 +20,7 @@ import {
 import type { PublishedLessonBody } from "@/lib/content/types";
 import { getPremiumAccess } from "@/lib/premium/access";
 import { courseHasAccess, isPremiumCourse } from "@/lib/premium/policy";
+import { pageCanonical } from "@/lib/seo";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -52,7 +53,9 @@ export async function generateMetadata({
       description: resolved.lesson.summary,
       siteName: brand.name,
       type: "website",
+      url: `/courses/${slug}/lessons/${lessonSlug}`,
     },
+    ...pageCanonical(`/courses/${slug}/lessons/${lessonSlug}`),
   };
 }
 

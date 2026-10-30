@@ -5,11 +5,13 @@ import { ArrowRight } from "lucide-react";
 import { BlogPostCard } from "@/components/blog/blog-post-card";
 import { SectionHeading } from "@/components/section-heading";
 import { getBlogPosts } from "@/data/blog";
+import { pageCanonical } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Blog — English learning tips and guides",
   description:
     "Practical, honest advice for learning English: speaking practice at home, daily routines, vocabulary habits and common mistakes to avoid.",
+  ...pageCanonical("/blog"),
 };
 
 export default function BlogPage() {

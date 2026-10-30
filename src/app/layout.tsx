@@ -4,6 +4,7 @@ import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { brand } from "@/config/brand";
+import { siteUrl } from "@/config/site";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -21,6 +22,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: `${brand.name} — ${brand.tagline}`,
     template: `%s | ${brand.name}`,
@@ -40,6 +42,7 @@ export const metadata: Metadata = {
     siteName: brand.name,
     locale: "en_US",
     type: "website",
+    url: siteUrl,
   },
   robots: {
     index: true,

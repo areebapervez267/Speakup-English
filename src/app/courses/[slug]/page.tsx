@@ -18,6 +18,7 @@ import {
 } from "@/lib/content/published";
 import { getPremiumAccess } from "@/lib/premium/access";
 import { courseHasAccess, isPremiumCourse } from "@/lib/premium/policy";
+import { pageCanonical } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 type CoursePageProps = {
@@ -54,7 +55,9 @@ export async function generateMetadata({
       description: course.summary,
       siteName: brand.name,
       type: "website",
+      url: `/courses/${course.slug}`,
     },
+    ...pageCanonical(`/courses/${course.slug}`),
   };
 }
 
