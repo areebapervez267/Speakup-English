@@ -26,10 +26,10 @@ export const manualPayments: ManualPaymentSettings = {
   enabled: true,
   priceLabel: "Rs 799 / month",
   periodMonths: 1,
-  bankName: "",
-  accountTitle: "",
-  iban: "",
-  supportEmail: "",
+  bankName: "Faysal Bank",
+  accountTitle: "Current account",
+  iban: "PK23FAYS3064488000007577",
+  supportEmail: "areeba.techmed@gmail.com",
 };
 
 /** True only when the settings are complete enough to collect money safely. */
