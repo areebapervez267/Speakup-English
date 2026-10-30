@@ -206,6 +206,24 @@ export function SignupForm({ configured }: { configured: boolean }) {
           Log in
         </Link>
       </p>
+
+      <p className="mt-3 text-center text-xs leading-5 text-brand-body">
+        By creating an account you agree to our{" "}
+        <Link
+          href="/terms"
+          className="font-semibold text-brand-navy underline decoration-brand-teal/50 underline-offset-2 transition-colors hover:text-brand-teal-deep"
+        >
+          terms of use
+        </Link>{" "}
+        and{" "}
+        <Link
+          href="/privacy-policy"
+          className="font-semibold text-brand-navy underline decoration-brand-teal/50 underline-offset-2 transition-colors hover:text-brand-teal-deep"
+        >
+          privacy policy
+        </Link>
+        .
+      </p>
     </div>
   );
 }

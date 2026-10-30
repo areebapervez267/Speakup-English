@@ -35,3 +35,10 @@ export const footerNav = {
     { label: "Writing", href: "/courses?skill=writing" },
   ],
 } as const;
+
+export const legalNav = [
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+  { label: "Privacy policy", href: "/privacy-policy" },
+  { label: "Terms", href: "/terms" },
+] as const;

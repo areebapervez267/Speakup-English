@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { BrandMark } from "@/components/brand-mark";
-import { brand, footerNav } from "@/config/brand";
+import { brand, footerNav, legalNav } from "@/config/brand";
 import { cefrLevels } from "@/data/curriculum";
 import { freeCourseCount } from "@/data/courses";
 
@@ -74,6 +74,18 @@ export function SiteFooter() {
             </span>
             <span>Seven skills, six levels</span>
           </p>
+          <ul className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            {legalNav.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="rounded-sm text-white/55 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </footer>

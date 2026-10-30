@@ -23,6 +23,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  // Trust pages: required for an AdSense application and useful for a
+  // site-quality review, so they are listed at low priority.
+  const legalRoutes: MetadataRoute.Sitemap = [
+    "/about",
+    "/contact",
+    "/privacy-policy",
+    "/terms",
+  ].map((path) => ({
+    url: `${baseUrl}${path}`,
+    changeFrequency: "yearly",
+    priority: 0.4,
+  }));
+
   const blogRoutes: MetadataRoute.Sitemap = getBlogPosts().map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: post.date,
@@ -30,5 +43,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...courseRoutes, ...blogRoutes];
+  return [...staticRoutes, ...legalRoutes, ...courseRoutes, ...blogRoutes];
 }
