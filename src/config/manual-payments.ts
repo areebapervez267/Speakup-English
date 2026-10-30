@@ -27,7 +27,7 @@ export const manualPayments: ManualPaymentSettings = {
   priceLabel: "Rs 799 / month",
   periodMonths: 1,
   bankName: "Faysal Bank",
-  accountTitle: "Current account",
+  accountTitle: "Areeba Pervez",
   iban: "PK23FAYS3064488000007577",
   supportEmail: "areeba.techmed@gmail.com",
 };
