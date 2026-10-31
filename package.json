@@ -12,6 +12,8 @@
     "test:admin": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/test-admin.mjs",
     "test:premium": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/test-premium.mjs",
     "test:level-test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/test-level-test.mjs",
+    "test:speech": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/test-speech.mjs",
+    "test:traffic": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/test-traffic.mjs",
     "test:certificates": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/test-certificates.mjs",
     "test:renewals": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/test-renewals.mjs",
     "test:integrity": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/test-integrity.mjs",

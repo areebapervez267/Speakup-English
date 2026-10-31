@@ -21,13 +21,13 @@ import {
   gradeLevelTest,
   type LevelTestAnswers,
 } from "@/lib/level-test/scoring";
+import { trackTraffic } from "@/lib/traffic/collect";
 import { cn } from "@/lib/utils";
 
 const TOTAL = levelTestQuestions.length;
 const ADVANCE_DELAY_MS = 220;
-const SHARE_TEXT = `I just found my English level with this free test — try yours: ${absoluteUrl(
-  "/level-test",
-)}`;
+const SHARE_URL = `${absoluteUrl("/level-test")}?src=share`;
+const SHARE_TEXT = `I just found my English level with this free test — try yours: ${SHARE_URL}`;
 
 type LevelTestProps = {
   /** The live course catalogue, passed from the server so recommendations are real. */
@@ -42,6 +42,11 @@ export function LevelTest({ courses, priceLabel }: LevelTestProps) {
   const [started, setStarted] = useState(false);
   const [finished, setFinished] = useState(false);
   const timer = useRef<number | null>(null);
+
+  useEffect(() => {
+    // Anonymous funnel count only: which post brought this visitor here.
+    trackTraffic("visit");
+  }, []);
 
   useEffect(
     () => () => {
@@ -68,6 +73,7 @@ export function LevelTest({ courses, priceLabel }: LevelTestProps) {
 
       if (cursor === TOTAL - 1) {
         setFinished(true);
+        trackTraffic("complete");
         return;
       }
 
@@ -128,7 +134,10 @@ export function LevelTest({ courses, priceLabel }: LevelTestProps) {
         <Button
           type="button"
           size="lg"
-          onClick={() => setStarted(true)}
+          onClick={() => {
+            setStarted(true);
+            trackTraffic("start");
+          }}
           className="mt-7 h-11 rounded-full bg-brand-navy px-7 text-sm font-semibold text-white hover:bg-brand-teal-deep"
         >
           Start the free level test

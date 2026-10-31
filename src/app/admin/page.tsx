@@ -15,7 +15,9 @@ import { AdminAccessPanel } from "@/components/admin/admin-access-panel";
 import { AdminActionForm } from "@/components/admin/admin-action-form";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
+import { MarketingTracker } from "@/components/admin/marketing-tracker";
 import { buttonVariants } from "@/components/ui/button";
+import { absoluteUrl } from "@/config/site";
 import { courses } from "@/data/courses";
 import { getAuthoredCourseSlugs } from "@/data/lessons";
 import { requireAdminPage } from "@/lib/admin/guard";
@@ -24,6 +26,7 @@ import {
   fetchAdminCourses,
   fetchAdminOverview,
 } from "@/lib/admin/queries";
+import { fetchMarketingFunnel } from "@/lib/admin/traffic-queries";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 
@@ -36,6 +39,38 @@ export const metadata: Metadata = {
 const builtInCourses = getAuthoredCourseSlugs()
   .map((slug) => courses.find((course) => course.slug === slug))
   .filter((course): course is (typeof courses)[number] => Boolean(course));
+
+/**
+ * The links to paste into each platform. Every one carries a ?src= tag, which is
+ * the only thing that lets the tracker tell a TikTok viewer from a WhatsApp one.
+ */
+const trackedLinks = [
+  {
+    label: "TikTok bio and captions",
+    href: absoluteUrl("/level-test?src=tiktok"),
+    note: "TikTok only allows one clickable link in the bio before 1,000 followers. Put this one there and write the plain address in captions.",
+  },
+  {
+    label: "WhatsApp Status",
+    href: absoluteUrl("/level-test?src=whatsapp"),
+    note: "Paste this into the text sticker on each Status slide instead of typing the address by hand.",
+  },
+  {
+    label: "YouTube Shorts and long videos",
+    href: absoluteUrl("/level-test?src=shorts"),
+    note: "First line of the description and the pinned comment.",
+  },
+  {
+    label: "Instagram bio and story link",
+    href: absoluteUrl("/level-test?src=instagram"),
+    note: "Use once you have enough followers for a clickable bio link.",
+  },
+  {
+    label: "A specific video",
+    href: absoluteUrl("/level-test?src=whatsapp&utm_campaign=level-reel-1"),
+    note: "Add utm_campaign to separate one post from another when the same platform gets several videos.",
+  },
+];
 
 function formatDateTime(value: string) {
   try {
@@ -84,9 +119,10 @@ export default async function AdminOverviewPage() {
     );
   }
 
-  const [overview, managedCourses] = await Promise.all([
+  const [overview, managedCourses, marketing] = await Promise.all([
     fetchAdminOverview(supabase),
     fetchAdminCourses(supabase),
+    fetchMarketingFunnel(supabase),
   ]);
 
   if (overview.status === "error") {
@@ -177,6 +213,12 @@ export default async function AdminOverviewPage() {
           </span>
           . Access was verified on the server for this request.
         </div>
+
+        <MarketingTracker
+          funnel={marketing.status === "ok" ? marketing.funnel : null}
+          error={marketing.status === "error" ? marketing.message : null}
+          links={trackedLinks}
+        />
 
       <section aria-labelledby="counts-heading">
         <h2 id="counts-heading" className="sr-only">

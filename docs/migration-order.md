@@ -1,4 +1,4 @@
-# Verified migration order (Phases 5–9.1)
+# Verified migration order (Phases 5–10)
 
 This page records the migration order that the SQL actually requires, not just
 the order implied by filenames. The order is enforced by
@@ -15,7 +15,7 @@ defined in the same or an earlier file.
 
 ## 1. Exact order
 
-Apply all ten files, in this order, to a fresh project.
+Apply all eleven files, in this order, to a fresh project.
 
 | # | Migration | Creates | Hard prerequisites |
 | --- | --- | --- | --- |
@@ -29,6 +29,7 @@ Apply all ten files, in this order, to a fresh project.
 | 8 | `20261026130000_create_premium_memberships.sql` | `memberships`, `payment_events`, membership helpers, Premium RLS, **replacement** `mark_lesson_complete` and `grade_published_lesson_quiz` | 1 (`set_updated_at`), 2 (progress table), 5 (`is_admin`), 6 (published tables), 7 (grading functions) |
 | 9 | `20261026140000_create_certificates.sql` | Certificate policies, required lessons, `certificates`, issuance/verification/admin RPCs | 1 (`set_updated_at`, `profiles`), 2 (progress evidence), 5 (`is_admin`, audit), 8 (`has_active_membership`) |
 | 10 | `20261026150000_harden_progress_writes.sql` | Write revocations, `static_quiz_answer_keys`, **final** `mark_lesson_complete`, `record_static_quiz_attempt`, `record_published_quiz_attempt` | 2 (progress/attempts), 6 (published tables), 8 (membership helpers, grading RPC), 9 (certificate policy/lesson tables) |
+| 11 | `20261031120000_create_marketing_events.sql` | `marketing_events` anonymous funnel counts, insert-only RLS for visitors, administrator-only read | 5 (`is_admin`) |
 
 Migration 5 has no dependency on Phase 5 progress. It is still listed after the
 progress files because the verified order is fixed and the static test enforces

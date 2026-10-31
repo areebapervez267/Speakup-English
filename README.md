@@ -56,11 +56,11 @@ configured.
 
 ## Supabase setup
 
-Apply the ten SQL migrations in `supabase/migrations/` in the exact order in
+Apply the eleven SQL migrations in `supabase/migrations/` in the exact order in
 [migration-order.md](docs/migration-order.md): Phase 5 (progress), Phase 7
-(admin and content), Phase 8 (premium), Phase 9 (certificates) and Phase 9.1
-(progress write hardening, which depends on every earlier phase and must run
-last). Step-by-step guides:
+(admin and content), Phase 8 (premium), Phase 9 (certificates), Phase 9.1
+(progress write hardening) and Phase 10 (anonymous marketing counts, which
+depends only on `public.is_admin()` and runs last). Step-by-step guides:
 
 - [Authentication setup](docs/authentication-setup.md)
 - [Migration order and dependency evidence](docs/migration-order.md)
@@ -70,6 +70,9 @@ last). Step-by-step guides:
   `public.admin_users`; sign-up and user metadata never grant it.
 - [Premium payments setup](docs/premium-payments-setup.md)
 - [Certificates setup](docs/certificates-setup.md)
+- [Marketing tracking setup](docs/marketing-tracking-setup.md) — what the
+  anonymous level-test funnel stores, how the link tags work and why a student
+  cannot read the counts back.
 - [Progress integrity audit](docs/progress-integrity-audit.md) — read-only
   review of rows that may predate the Phase 9.1 write revocation.
 - [Pre-launch live verification](docs/prelaunch-verification.md) — two-student
@@ -85,6 +88,9 @@ npm run test:progress
 npm run test:dashboard
 npm run test:admin
 npm run test:premium
+npm run test:level-test
+npm run test:speech
+npm run test:traffic
 npm run test:certificates
 npm run test:integrity
 npm run test:migrations

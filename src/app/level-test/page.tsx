@@ -72,11 +72,12 @@ export default async function LevelTestPage() {
           </div>
           <div>
             <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-brand-teal-deep">
-              Nothing leaves your browser
+              Your answers stay on your device
             </h3>
             <p className="mt-2.5 text-sm leading-6 text-brand-body">
-              Scoring happens on your device. No account, no email, no payment
-              details — and no result saved anywhere.
+              Scoring happens in your browser. No account, no email, no payment
+              details and no result saved anywhere. We count arrivals and
+              completions anonymously — never who you were or what you picked.
             </p>
           </div>
         </div>

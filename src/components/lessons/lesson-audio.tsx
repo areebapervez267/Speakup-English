@@ -5,18 +5,24 @@ import type { ReactNode } from "react";
 import { Pause, Play, Turtle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import type { SpeakerGender } from "@/lib/speaker-gender";
+import {
+  NORMAL_RATE,
+  SLOW_RATE,
+  pickVoice,
+} from "@/lib/speech-voices";
 
-const NORMAL_RATE = 1;
-const SLOW_RATE = 0.55;
 const KEEP_ALIVE_MS = 9000;
 
 type ActiveSpeech = { token: string };
+export type SpeechPart = { text: string; gender?: SpeakerGender };
 
 let active: ActiveSpeech | null = null;
 let rate = NORMAL_RATE;
 let supported = true;
 let voicesWarmed = false;
-let cachedVoice: SpeechSynthesisVoice | null = null;
+let generation = 0;
+let pending: SpeechSynthesisUtterance[] = [];
 let keepAlive: ReturnType<typeof setInterval> | null = null;
 
 const listeners = new Set<() => void>();
@@ -54,28 +60,23 @@ function getSynth(): SpeechSynthesis | null {
   return window.speechSynthesis;
 }
 
-const PREFERRED_LANGS = ["en-GB", "en-US", "en-AU", "en-IE", "en-IN"];
-
-function resolveVoice(synth: SpeechSynthesis): SpeechSynthesisVoice | null {
-  if (cachedVoice) return cachedVoice;
-  const voices = synth.getVoices();
-  if (voices.length === 0) return null;
-  const english = voices.filter((voice) =>
-    voice.lang?.toLowerCase().startsWith("en"),
-  );
-  const pool = english.length > 0 ? english : voices;
-  for (const wanted of PREFERRED_LANGS) {
-    const match = pool.find(
-      (voice) =>
-        voice.lang?.replace("_", "-").toLowerCase() === wanted.toLowerCase(),
-    );
-    if (match) {
-      cachedVoice = match;
-      return match;
-    }
+function availableVoices(): SpeechSynthesisVoice[] {
+  const synth = getSynth();
+  if (!synth) return [];
+  try {
+    return synth.getVoices();
+  } catch {
+    return [];
   }
-  cachedVoice = pool[0] ?? null;
-  return cachedVoice;
+}
+
+/**
+ * Pick the voice for one line. Some engines only expose the voice list after a
+ * speech request is made, so the first call may still see an empty array — the
+ * browser then picks a default from `lang`.
+ */
+function voiceFor(gender?: SpeakerGender) {
+  return pickVoice(availableVoices(), gender);
 }
 
 function warmVoices() {
@@ -83,12 +84,11 @@ function warmVoices() {
   const synth = getSynth();
   if (!synth) return;
   voicesWarmed = true;
-  if (synth.getVoices().length > 0) {
-    resolveVoice(synth);
-    return;
-  }
+  if (synth.getVoices().length > 0) return;
   const change = () => {
-    if (resolveVoice(synth)) synth.removeEventListener("voiceschanged", change);
+    if (synth.getVoices().length > 0) {
+      synth.removeEventListener("voiceschanged", change);
+    }
   };
   synth.addEventListener("voiceschanged", change);
   // Some engines only fill the list after an utterance is queued.
@@ -104,23 +104,74 @@ function detectSupport() {
   warmVoices();
 }
 
+function buildUtterance(part: SpeechPart, token: string, gen: number) {
+  const utterance = new SpeechSynthesisUtterance(part.text);
+  const { voice, pitch } = voiceFor(part.gender);
+  if (voice) {
+    utterance.voice = voice;
+    utterance.lang = voice.lang;
+  } else {
+    utterance.lang = "en-GB";
+  }
+  utterance.rate = rate;
+  utterance.pitch = pitch;
+
+  const isStale = () => gen !== generation;
+
+  utterance.onend = () => {
+    if (isStale()) return;
+    pump();
+  };
+  utterance.onerror = () => {
+    if (isStale()) return;
+    pending = [];
+    if (active?.token === token) {
+      active = null;
+      publish();
+    }
+  };
+  return utterance;
+}
+
+/** Speak the next queued line, or finish the group when the queue is empty. */
+function pump(): boolean {
+  const synth = getSynth();
+  if (!synth || !active) {
+    pending = [];
+    return false;
+  }
+  const next = pending.shift();
+  if (!next) {
+    active = null;
+    publish();
+    return false;
+  }
+  synth.speak(next);
+  return true;
+}
+
 function startKeepAlive(synth: SpeechSynthesis) {
   if (keepAlive) return;
   keepAlive = setInterval(() => {
+    if (!active) {
+      if (keepAlive) clearInterval(keepAlive);
+      keepAlive = null;
+      return;
+    }
     if (synth.speaking && !synth.paused) {
       // Chrome silently drops long utterances; nudging keeps them playing.
       synth.pause();
       synth.resume();
-    } else if (!synth.speaking) {
-      if (keepAlive) clearInterval(keepAlive);
-      keepAlive = null;
-      active = null;
-      publish();
+    } else if (!synth.speaking && !synth.pending) {
+      // A queued line whose onend event never fired — keep the dialogue moving.
+      pump();
     }
   }, KEEP_ALIVE_MS);
 }
 
 function stopAll() {
+  generation += 1;
+  pending = [];
   const synth = getSynth();
   if (synth) synth.cancel();
   if (keepAlive) clearInterval(keepAlive);
@@ -129,9 +180,10 @@ function stopAll() {
   publish();
 }
 
-function speak(token: string, text: string): boolean {
+function speakParts(token: string, parts: SpeechPart[]): boolean {
   const synth = getSynth();
-  if (!synth) return false;
+  const usable = parts.filter((part) => part.text.trim().length > 0);
+  if (!synth || usable.length === 0) return false;
 
   if (active?.token === token) {
     stopAll();
@@ -140,32 +192,25 @@ function speak(token: string, text: string): boolean {
 
   synth.cancel();
   warmVoices();
+  generation += 1;
+  const gen = generation;
 
-  const utterance = new SpeechSynthesisUtterance(text);
-  const voice = resolveVoice(synth);
-  if (voice) {
-    utterance.voice = voice;
-    utterance.lang = voice.lang;
-  } else {
-    utterance.lang = "en-GB";
-  }
-  utterance.rate = rate;
-  utterance.pitch = 1;
-
-  const finish = () => {
-    if (active?.token === token) {
-      active = null;
-      publish();
-    }
-  };
-  utterance.onend = finish;
-  utterance.onerror = finish;
+  const utterances = usable.map((part) => buildUtterance(part, token, gen));
+  pending = utterances.slice(1);
 
   active = { token };
   publish();
-  synth.speak(utterance);
+  synth.speak(utterances[0]);
   startKeepAlive(synth);
   return true;
+}
+
+function speak(
+  token: string,
+  text: string,
+  gender?: SpeakerGender,
+): boolean {
+  return speakParts(token, [{ text, gender }]);
 }
 
 function useSpeech() {
@@ -191,10 +236,12 @@ function useStopOnUnmount(token: string) {
 
 export function SpeakButton({
   text,
+  gender,
   label,
   className,
 }: {
   text: string;
+  gender?: SpeakerGender;
   label?: string;
   className?: string;
 }) {
@@ -209,13 +256,20 @@ export function SpeakButton({
   return (
     <button
       type="button"
-      onClick={() => speak(token, text)}
+      onClick={() => speak(token, text, gender)}
       aria-label={label ?? (isPlaying ? "Stop audio" : "Listen in English")}
       aria-pressed={isPlaying}
-      title={isPlaying ? "Stop" : "Listen"}
+      title={
+        gender
+          ? `${isPlaying ? "Stop" : "Listen"} — ${gender} voice`
+          : isPlaying
+            ? "Stop"
+            : "Listen"
+      }
       className={cn(
         "inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-brand-line bg-white text-brand-teal-deep shadow-sm transition-colors hover:bg-brand-teal-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal",
-        isPlaying && "border-brand-teal-deep bg-brand-teal-deep text-white hover:bg-brand-teal-deep",
+        isPlaying &&
+          "border-brand-teal-deep bg-brand-teal-deep text-white hover:bg-brand-teal-deep",
         className,
       )}
     >
@@ -230,11 +284,13 @@ export function SpeakButton({
 
 export function SpeakPill({
   text,
+  parts,
   label,
   children,
   className,
 }: {
-  text: string;
+  text?: string;
+  parts?: SpeechPart[];
   label?: string;
   children: ReactNode;
   className?: string;
@@ -250,12 +306,19 @@ export function SpeakPill({
   return (
     <button
       type="button"
-      onClick={() => speak(token, text)}
+      onClick={() => {
+        if (parts && parts.length > 0) {
+          speakParts(token, parts);
+        } else if (text) {
+          speak(token, text);
+        }
+      }}
       aria-label={label}
       aria-pressed={isPlaying}
       className={cn(
         "inline-flex min-w-[7.5rem] shrink-0 items-center justify-center gap-1.5 rounded-full border border-brand-line bg-white px-3 py-1.5 text-[0.6rem] font-bold uppercase tracking-[0.12em] text-brand-teal-deep shadow-sm transition-colors hover:bg-brand-teal-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal",
-        isPlaying && "border-brand-teal-deep bg-brand-teal-deep text-white hover:bg-brand-teal-deep",
+        isPlaying &&
+          "border-brand-teal-deep bg-brand-teal-deep text-white hover:bg-brand-teal-deep",
         className,
       )}
     >

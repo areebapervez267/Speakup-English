@@ -16,7 +16,8 @@ import {
   SpeakButton,
   SpeakPill,
 } from "@/components/lessons/lesson-audio";
-import type { LessonBlock } from "@/data/lessons/types";
+import type { DialogueLine, LessonBlock } from "@/data/lessons/types";
+import { gendersForLines } from "@/lib/speaker-gender";
 import { cn } from "@/lib/utils";
 
 function joinForReading(lines: readonly string[]) {
@@ -24,6 +25,19 @@ function joinForReading(lines: readonly string[]) {
     .map((line) => line.trim())
     .filter(Boolean)
     .join(". ");
+}
+
+/**
+ * Give every line of a conversation the voice of its speaker, so "Hey, my name
+ * is Ben" is a man and "Hey, my name is Anna" is a woman.
+ */
+function withVoices(lines: readonly DialogueLine[]) {
+  const voices = gendersForLines(lines);
+  return lines.map((line, index) => ({
+    speaker: line.speaker,
+    text: line.text,
+    gender: voices[index],
+  }));
 }
 
 export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
@@ -401,7 +415,8 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
               </section>
             );
 
-          case "dialogue":
+          case "dialogue": {
+            const lines = withVoices(block.lines);
             return (
               <section
                 key={index}
@@ -422,7 +437,10 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                     </h2>
                   </div>
                   <SpeakPill
-                    text={joinForReading(block.lines.map((line) => line.text))}
+                    parts={lines.map((line) => ({
+                      text: line.text,
+                      gender: line.gender,
+                    }))}
                     label="Listen to the whole dialogue"
                   >
                     Play dialogue
@@ -433,8 +451,12 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                     {block.intro}
                   </p>
                 )}
+                <p className="mt-2 text-xs leading-5 text-brand-body">
+                  A man and a woman read the lines, so it sounds like a real
+                  conversation.
+                </p>
                 <ol className="mt-4 space-y-2.5">
-                  {block.lines.map((line, lineIndex) => (
+                  {lines.map((line, lineIndex) => (
                     <li
                       key={lineIndex}
                       className="flex items-start gap-3 rounded-2xl border border-brand-line bg-white px-4 py-3 shadow-sm"
@@ -449,6 +471,7 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                       </div>
                       <SpeakButton
                         text={line.text}
+                        gender={line.gender}
                         label={`Listen to ${line.speaker}`}
                         className="mt-0.5"
                       />
@@ -457,8 +480,10 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                 </ol>
               </section>
             );
+          }
 
-          case "transcript":
+          case "transcript": {
+            const lines = withVoices(block.lines);
             return (
               <section
                 key={index}
@@ -472,7 +497,10 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                       Listening transcript
                     </p>
                     <SpeakPill
-                      text={joinForReading(block.lines.map((line) => line.text))}
+                      parts={lines.map((line) => ({
+                        text: line.text,
+                        gender: line.gender,
+                      }))}
                       label="Listen to the whole transcript"
                     >
                       Play transcript
@@ -488,7 +516,8 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                 <div className="px-5 py-5 sm:px-6">
                   <p className="rounded-xl bg-brand-mist px-3.5 py-2.5 text-xs leading-5 text-brand-body">
                     Press ▶ to hear a line, then cover the text and answer the
-                    questions from what you heard. Use{" "}
+                    questions from what you heard. Each speaker gets their own
+                    voice. Use{" "}
                     <span className="font-semibold text-brand-teal-deep">
                       Slow
                     </span>{" "}
@@ -500,7 +529,7 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                     </p>
                   )}
                   <ol className="mt-4 space-y-3">
-                    {block.lines.map((line, lineIndex) => (
+                    {lines.map((line, lineIndex) => (
                       <li
                         key={lineIndex}
                         className="grid gap-1 border-l-2 border-brand-line pl-3.5 sm:grid-cols-[7rem_minmax(0,1fr)_auto] sm:gap-3"
@@ -513,6 +542,7 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                         </p>
                         <SpeakButton
                           text={line.text}
+                          gender={line.gender}
                           label={`Listen to ${line.speaker}`}
                           className="mt-0.5 justify-self-start sm:justify-self-end"
                         />
@@ -522,6 +552,7 @@ export function LessonContent({ blocks }: { blocks: LessonBlock[] }) {
                 </div>
               </section>
             );
+          }
 
           case "sound":
             return (

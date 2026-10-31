@@ -21,6 +21,7 @@ const EXPECTED_ORDER = [
   "20261026130000_create_premium_memberships.sql",
   "20261026140000_create_certificates.sql",
   "20261026150000_harden_progress_writes.sql",
+  "20261031120000_create_marketing_events.sql",
 ];
 
 function stripSqlNoise(sql) {

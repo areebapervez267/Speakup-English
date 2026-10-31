@@ -20,7 +20,7 @@ export default function PrivacyPolicyPage() {
       navName="Privacy policy"
       eyebrow="Privacy policy"
       title="What we store, and what we never touch"
-      updated="30 October 2026"
+      updated="31 October 2026"
       intro={
         <p>
           {brand.name} is a small, independent learning site. This policy says
@@ -53,6 +53,14 @@ export default function PrivacyPolicyPage() {
             <strong>Payment evidence</strong>, only if you buy premium: the
             receipt you email us, kept so we can confirm a transfer.
           </li>
+          <li>
+            <strong>Anonymous visit counts</strong> for the free level test: one
+            of three numbers — arrived, started, finished — plus the label of the
+            post or platform that linked here (for example{" "}
+            <code className="font-mono text-[0.85em]">tiktok</code>). No name, no
+            email, no IP address, no device id and no answer or result is stored
+            with it, so a count can never be traced back to a person.
+          </li>
         </ul>
       </ProseSection>
 
@@ -74,7 +82,11 @@ export default function PrivacyPolicyPage() {
           Signed-in learners get a small number of first-party session cookies.
           They keep you logged in and remember your own interface choices. If you
           browse courses or the level test without an account, no personal cookie
-          is set.
+          is set. The level test also remembers one tiny label in your
+          browser&apos;s own storage — the platform that linked here, kept for 30
+          days so the same visitor is credited to the same post. It stays on your
+          device, is never sent to another company and you can clear it at any
+          time in your browser settings.
         </p>
       </ProseSection>
 
