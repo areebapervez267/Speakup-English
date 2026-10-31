@@ -6,6 +6,7 @@ import { AdminActionForm } from "@/components/admin/admin-action-form";
 import { AdminField } from "@/components/admin/admin-field";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
+import { RenewalPanel } from "@/components/admin/renewal-panel";
 import {
   adminCardClass,
   adminInputClass,
@@ -22,6 +23,7 @@ import {
   formatMembershipDate,
   MEMBERSHIP_STATUS_LABELS,
 } from "@/lib/premium/display";
+import { buildRenewalReport } from "@/lib/premium/renewals";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -76,6 +78,7 @@ export default async function AdminMembershipsPage() {
   const complimentaryCount = rows.filter(
     (row) => row.isActive && row.source === "admin",
   ).length;
+  const renewals = buildRenewalReport(rows);
 
   return (
     <>
@@ -115,6 +118,15 @@ export default async function AdminMembershipsPage() {
           </p>
         </div>
       </div>
+
+      {(renewals.dueSoon.length +
+        renewals.overdue.length +
+        renewals.healthyCount) >
+        0 && (
+        <div className="mt-8">
+          <RenewalPanel report={renewals} />
+        </div>
+      )}
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
         <section
