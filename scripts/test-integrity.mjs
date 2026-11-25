@@ -48,6 +48,7 @@ const seededKeys = [...keyBlock.matchAll(
 }));
 
 const authoredKeys = await loadAuthoredQuizKeys();
+const a1AuthoredKeys = authoredKeys.filter((row) => row.level === "a1");
 
 test("students hold no direct write grants or write policies on progress evidence", () => {
   assert.match(
@@ -194,8 +195,8 @@ test("private static answer keys are never readable by clients", () => {
   );
 });
 
-test("seeded answer keys match every authored quiz exactly", () => {
-  assert.equal(seededKeys.length, authoredKeys.length);
+test("the original seeded answer keys still match all 84 A1 quizzes exactly", () => {
+  assert.equal(seededKeys.length, a1AuthoredKeys.length);
   assert.equal(seededKeys.length, 84);
   assert.equal(
     seededKeys.reduce((total, row) => total + row.questions.length, 0),
@@ -203,7 +204,7 @@ test("seeded answer keys match every authored quiz exactly", () => {
   );
 
   const expected = new Map(
-    authoredKeys.map((row) => [
+    a1AuthoredKeys.map((row) => [
       `${row.courseSlug}/${row.lessonSlug}`,
       row.questions,
     ]),
@@ -215,7 +216,7 @@ test("seeded answer keys match every authored quiz exactly", () => {
     assert.deepEqual(
       row.questions,
       expected.get(key),
-      `answer key drift for ${key}; re-run scripts/generate-static-quiz-keys.mjs`,
+      `answer key drift for ${key}; re-run scripts/generate-static-quiz-keys.mjs --level a1`,
     );
   }
 });

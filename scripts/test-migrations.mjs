@@ -22,6 +22,7 @@ const EXPECTED_ORDER = [
   "20261026140000_create_certificates.sql",
   "20261026150000_harden_progress_writes.sql",
   "20261031120000_create_marketing_events.sql",
+  "20261125120000_add_c1_c2_static_learning.sql",
 ];
 
 function stripSqlNoise(sql) {
@@ -138,6 +139,10 @@ test("migration files match the verified dependency order", () => {
 
   assert.deepEqual(actual, EXPECTED_ORDER);
   assert.equal(orderOf("20261026150000_harden_progress_writes.sql"), 9);
+  assert.ok(
+    orderOf("20261125120000_add_c1_c2_static_learning.sql") >
+      orderOf("20261026150000_harden_progress_writes.sql"),
+  );
 });
 
 test("every referenced public object is defined in the same or an earlier migration", () => {

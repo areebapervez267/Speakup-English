@@ -17,8 +17,10 @@
     "test:certificates": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/test-certificates.mjs",
     "test:renewals": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/test-renewals.mjs",
     "test:integrity": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/test-integrity.mjs",
+    "test:advanced-content": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/test-advanced-content.mjs",
     "test:migrations": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/test-migrations.mjs",
     "generate:quiz-keys": "node scripts/generate-static-quiz-keys.mjs",
+    "generate:advanced-migration": "node scripts/generate-advanced-learning-migration.mjs",
     "test:rls": "node --env-file-if-exists=.env.local scripts/progress-rls-check.mjs"
   },
   "dependencies": {

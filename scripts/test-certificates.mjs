@@ -32,6 +32,16 @@ function slice(contents, start, end) {
     : contents.slice(startIndex, endIndex);
 }
 
+const a1CourseSlugs = [
+  "grammar-foundations",
+  "essential-500-words",
+  "reading-from-day-one",
+  "write-your-first-sentences",
+  "everyday-listening",
+  "first-conversations",
+  "sounds-of-english",
+];
+
 const authoredCourses = {
   "grammar-foundations": "a1-grammar",
   "essential-500-words": "a1-vocabulary",
@@ -40,7 +50,25 @@ const authoredCourses = {
   "everyday-listening": "a1-listening",
   "first-conversations": "a1-speaking",
   "sounds-of-english": "a1-pronunciation",
+  "advanced-grammar-in-context": "c1-grammar",
+  "advanced-listening": "c1-listening",
+  "articulate-speaking": "c1-speaking",
+  "refine-your-accent": "c1-pronunciation",
+  "nuance-and-collocation": "c1-vocabulary",
+  "advanced-critical-reading": "c1-reading",
+  "academic-professional-writing": "c1-writing",
+  "mastery-grammar": "c2-grammar",
+  "effortless-listening": "c2-listening",
+  "command-the-conversation": "c2-speaking",
+  "polished-delivery": "c2-pronunciation",
+  "precision-and-style": "c2-vocabulary",
+  "mastering-complex-texts": "c2-reading",
+  "writing-with-authority": "c2-writing",
 };
+
+const advancedCourseSlugs = Object.keys(authoredCourses).filter(
+  (slug) => !a1CourseSlugs.includes(slug),
+);
 
 function authoredLessons(courseSlug) {
   const dir = join(
@@ -89,6 +117,26 @@ const policies = [...policyBlock.matchAll(
 }));
 
 const seededLessons = [...lessonBlock.matchAll(
+  /\('([^']+)', '([^']+)', (true|false)\)/g,
+)].map((match) => ({
+  courseSlug: match[1],
+  lessonSlug: match[2],
+  requiresQuiz: match[3] === "true",
+}));
+
+const advancedMigration = source(
+  "supabase/migrations/20261125120000_add_c1_c2_static_learning.sql",
+);
+const advancedPolicies = [...advancedMigration.matchAll(
+  /\('([^']+)', '([^']+)', '(c1|c2)', (true|false), (\d+)\)/g,
+)].map((match) => ({
+  slug: match[1],
+  title: match[2],
+  level: match[3],
+  premium: match[4] === "true",
+  minimum: Number(match[5]),
+}));
+const advancedSeededLessons = [...advancedMigration.matchAll(
   /\('([^']+)', '([^']+)', (true|false)\)/g,
 )].map((match) => ({
   courseSlug: match[1],
@@ -190,11 +238,11 @@ test("certificate status labels cover issued, revoked and in-progress states", (
   assert.equal(certificateEligibilityLabel(base), "In progress");
 });
 
-test("only the seven fully authored A1 courses have certificate policies", () => {
+test("the original migration seeds only the seven authored A1 policies", () => {
   assert.equal(policies.length, 7);
   assert.deepEqual(
     policies.map((policy) => policy.slug).sort(),
-    Object.keys(authoredCourses).sort(),
+    [...a1CourseSlugs].sort(),
   );
 
   const titles = new Map(policies.map((policy) => [policy.slug, policy.title]));
@@ -234,7 +282,7 @@ test("only the seven fully authored A1 courses have certificate policies", () =>
   }
 });
 
-test("seeded certificate lessons match all 84 authored lessons exactly", () => {
+test("the original certificate seed matches all 84 A1 lessons exactly", () => {
   assert.equal(seededLessons.length, 84);
 
   const key = (courseSlug, lessonSlug) => `${courseSlug}/${lessonSlug}`;
@@ -245,7 +293,7 @@ test("seeded certificate lessons match all 84 authored lessons exactly", () => {
 
   let expectedTotal = 0;
 
-  for (const courseSlug of Object.keys(authoredCourses)) {
+  for (const courseSlug of a1CourseSlugs) {
     const { lessons, quizCount } = authoredLessons(courseSlug);
     expectedTotal += lessons.length;
 
@@ -276,6 +324,36 @@ test("seeded certificate lessons match all 84 authored lessons exactly", () => {
     70,
     "six quiz-bearing courses cover 70 lessons",
   );
+});
+
+test("the additive migration seeds all 240 C1/C2 certificate lessons", () => {
+  assert.equal(advancedPolicies.length, 14);
+  assert.equal(advancedSeededLessons.length, 240);
+  assert.deepEqual(
+    advancedPolicies.map((policy) => policy.slug).sort(),
+    [...advancedCourseSlugs].sort(),
+  );
+
+  for (const policy of advancedPolicies) {
+    assert.ok(policy.level === "c1" || policy.level === "c2");
+    assert.equal(policy.premium, true);
+    assert.equal(policy.minimum, 60);
+  }
+
+  for (const courseSlug of advancedCourseSlugs) {
+    const { lessons, quizCount } = authoredLessons(courseSlug);
+    assert.equal(quizCount, lessons.length, `${courseSlug} quiz coverage`);
+
+    const rows = advancedSeededLessons.filter(
+      (row) => row.courseSlug === courseSlug,
+    );
+    assert.deepEqual(
+      rows.map((row) => row.lessonSlug).sort(),
+      [...lessons].sort(),
+      `${courseSlug} advanced certificate lesson list`,
+    );
+    assert.ok(rows.every((row) => row.requiresQuiz));
+  }
 });
 
 test("certificate ownership and duplicate issuance are enforced in the database", () => {

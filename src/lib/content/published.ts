@@ -651,9 +651,9 @@ export async function resolveLessonOutline(
 }
 
 /**
- * Full static lesson body for authored built-in courses. Built-in interactive
- * lessons are all free today; callers must still check the course access policy
- * before rendering this content.
+ * Full static lesson body for authored built-in courses. Built-in lessons may
+ * be free or Premium; callers must check the course access policy before
+ * rendering this content.
  */
 export function getStaticLessonBody(
   courseSlug: string,
