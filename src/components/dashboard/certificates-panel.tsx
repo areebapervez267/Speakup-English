@@ -104,9 +104,9 @@ export function CertificatesPanel({
           className="mt-0.5 size-3.5 shrink-0 text-brand-teal-deep"
           aria-hidden="true"
         />
-        Only the {authoredCount} complete A1 courses can award certificates.{" "}
-        {outlineOnlyCount} outline-only courses are not certificate-eligible
-        because their lessons are not built yet.
+        All {authoredCount} complete courses across A1, C1 and C2 can award
+        certificates. {outlineOnlyCount} outline-only courses are not
+        certificate-eligible because their lessons are not built yet.
       </p>
     </section>
   );

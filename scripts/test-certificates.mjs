@@ -496,7 +496,12 @@ test("student dashboard renders certificate eligibility and issue actions", () =
   const panel = source("src/components/dashboard/certificates-panel.tsx");
   assert.match(panel, /Issue certificate|CertificateIssueForm/);
   assert.match(panel, /View and print/);
-  assert.match(panel, /not certificate-eligible/);
+  assert.match(panel, /not\s+certificate-eligible/);
+  assert.match(
+    panel,
+    /\{authoredCount\} complete courses across A1, C1 and C2 can award/,
+  );
+  assert.doesNotMatch(panel, /complete A1 courses can award certificates/);
   assert.match(panel, /getAuthoredCourseSlugs/);
 
   const form = source(
