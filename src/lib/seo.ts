@@ -1,8 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, MetadataRoute } from "next";
 
 import { brand } from "@/config/brand";
 import { absoluteUrl, siteUrl } from "@/config/site";
 import type { BlogPost } from "@/data/blog/types";
+import type { Course } from "@/data/courses";
+import { getAuthoredCourse, getLessonEntries } from "@/data/lessons";
 
 /**
  * Declares the single URL search engines should index for a page. Paths are
@@ -73,4 +75,22 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
       item: absoluteUrl(item.path),
     })),
   };
+}
+
+export function getPublicLessonSitemapEntries(
+  catalog: readonly Course[],
+): MetadataRoute.Sitemap {
+  // Only authored lessons in free courses are listed. Premium lesson bodies
+  // are access-gated, and outline-only levels do not have lesson pages yet.
+  return catalog.flatMap((course) => {
+    if (course.premium || !getAuthoredCourse(course.slug)) {
+      return [];
+    }
+
+    return getLessonEntries(course.slug).map(({ lesson }) => ({
+      url: absoluteUrl(`/courses/${course.slug}/lessons/${lesson.slug}`),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }));
+  });
 }

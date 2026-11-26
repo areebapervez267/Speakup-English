@@ -1,11 +1,14 @@
 import type { MetadataRoute } from "next";
 
-import { getBlogPosts } from "@/data/blog";
-import { getPublicCourseSlugs } from "@/lib/content/published";
 import { siteUrl as baseUrl } from "@/config/site";
+import { getBlogPosts } from "@/data/blog";
+import { courses } from "@/data/courses";
+import { getPublicCourseSlugs } from "@/lib/content/published";
+import { getPublicLessonSitemapEntries } from "@/lib/seo";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const slugs = await getPublicCourseSlugs();
+  const lessonRoutes = getPublicLessonSitemapEntries(courses);
 
   // /login and /signup carry `noindex`, so listing them here would send
   // Google mixed signals.
@@ -43,5 +46,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...legalRoutes, ...courseRoutes, ...blogRoutes];
+  return [
+    ...staticRoutes,
+    ...legalRoutes,
+    ...courseRoutes,
+    ...lessonRoutes,
+    ...blogRoutes,
+  ];
 }
