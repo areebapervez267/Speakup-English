@@ -458,6 +458,7 @@ export async function getPublishedCourseList(): Promise<Course[]> {
           lessons: asNumber(row.lesson_count),
           hours: asNumber(row.hours, 1),
           premium: row.premium === true,
+          contentStatus: "complete",
         } satisfies Course,
       ];
     });

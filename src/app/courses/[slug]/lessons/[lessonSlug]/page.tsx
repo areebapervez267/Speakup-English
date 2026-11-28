@@ -9,7 +9,7 @@ import { LessonPagination } from "@/components/lessons/lesson-pagination";
 import { LessonProgressSection } from "@/components/lessons/lesson-progress";
 import { LessonQuiz } from "@/components/lessons/lesson-quiz";
 import { LessonSidebar } from "@/components/lessons/lesson-sidebar";
-import { brand } from "@/config/brand";
+import { JsonLd } from "@/components/seo/json-ld";
 import { getLevel } from "@/data/curriculum";
 import {
   getPublishedLessonBody,
@@ -20,7 +20,11 @@ import {
 import type { PublishedLessonBody } from "@/lib/content/types";
 import { getPremiumAccess } from "@/lib/premium/access";
 import { courseHasAccess, isPremiumCourse } from "@/lib/premium/policy";
-import { pageCanonical } from "@/lib/seo";
+import {
+  breadcrumbSchema,
+  learningResourceSchema,
+  pageMetadata,
+} from "@/lib/seo";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -45,18 +49,17 @@ export async function generateMetadata({
     return { title: "Lesson not found" };
   }
 
-  return {
+  const description =
+    resolved.lesson.summary.trim() ||
+    resolved.lesson.objective.trim() ||
+    resolved.course.detail.course.summary.trim() ||
+    `A structured ${getLevel(resolved.course.detail.course.level).label} English lesson with explanations, examples and practice.`;
+
+  return pageMetadata({
     title: `${resolved.lesson.title} — ${resolved.course.detail.course.title}`,
-    description: resolved.lesson.summary,
-    openGraph: {
-      title: `${resolved.lesson.title} | ${brand.name}`,
-      description: resolved.lesson.summary,
-      siteName: brand.name,
-      type: "website",
-      url: `/courses/${slug}/lessons/${lessonSlug}`,
-    },
-    ...pageCanonical(`/courses/${slug}/lessons/${lessonSlug}`),
-  };
+    description,
+    path: `/courses/${slug}/lessons/${lessonSlug}`,
+  });
 }
 
 export default async function LessonPage({ params }: LessonPageProps) {
@@ -98,6 +101,29 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   return (
     <article>
+      <JsonLd
+        data={[
+          learningResourceSchema({
+            title: lesson.title,
+            description: lesson.summary || lesson.objective,
+            courseTitle: course.title,
+            courseSlug: course.slug,
+            lessonSlug: lesson.slug,
+            level: course.level,
+            minutes: lesson.minutes,
+            premium,
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Courses", path: "/courses" },
+            { name: course.title, path: `/courses/${course.slug}` },
+            {
+              name: lesson.title,
+              path: `/courses/${course.slug}/lessons/${lesson.slug}`,
+            },
+          ]),
+        ]}
+      />
       <header className="border-b border-brand-line bg-brand-mist">
         <div className="site-container py-8 sm:py-12">
           <nav aria-label="Breadcrumb">

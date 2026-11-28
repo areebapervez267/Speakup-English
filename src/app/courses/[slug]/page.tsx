@@ -6,9 +6,9 @@ import { ArrowRight, Check } from "lucide-react";
 import { CourseCard } from "@/components/course-card";
 import { CourseDetailHero } from "@/components/courses/course-detail-hero";
 import { CourseOutline } from "@/components/courses/course-outline";
+import { JsonLd } from "@/components/seo/json-ld";
 import { SectionHeading } from "@/components/section-heading";
 import { buttonVariants } from "@/components/ui/button";
-import { brand } from "@/config/brand";
 import { getRelatedCoursesFrom } from "@/data/course-details";
 import { getLevel, getSkill } from "@/data/curriculum";
 import {
@@ -18,7 +18,11 @@ import {
 } from "@/lib/content/published";
 import { getPremiumAccess } from "@/lib/premium/access";
 import { courseHasAccess, isPremiumCourse } from "@/lib/premium/policy";
-import { pageCanonical } from "@/lib/seo";
+import {
+  breadcrumbSchema,
+  courseSchema,
+  pageMetadata,
+} from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 type CoursePageProps = {
@@ -46,19 +50,19 @@ export async function generateMetadata({
   const { course } = resolved.detail;
   const level = getLevel(course.level);
   const skill = getSkill(course.skill);
+  const baseDescription =
+    course.summary.trim() ||
+    resolved.detail.overview.trim() ||
+    `A ${level.label} ${skill.label.toLowerCase()} course with clear CEFR outcomes and structured practice.`;
+  const description = resolved.detail.hasFullContent
+    ? baseDescription
+    : `${baseDescription} Syllabus preview; interactive lessons for this course are still being built.`;
 
-  return {
+  return pageMetadata({
     title: `${course.title} — ${level.label} ${skill.label} course`,
-    description: course.summary,
-    openGraph: {
-      title: `${course.title} | ${brand.name}`,
-      description: course.summary,
-      siteName: brand.name,
-      type: "website",
-      url: `/courses/${course.slug}`,
-    },
-    ...pageCanonical(`/courses/${course.slug}`),
-  };
+    description,
+    path: `/courses/${course.slug}`,
+  });
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {
@@ -80,6 +84,16 @@ export default async function CoursePage({ params }: CoursePageProps) {
 
   return (
     <>
+      <JsonLd
+        data={[
+          courseSchema(course),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Courses", path: "/courses" },
+            { name: course.title, path: `/courses/${course.slug}` },
+          ]),
+        ]}
+      />
       <CourseDetailHero detail={detail} access={access} />
 
       <section className="border-b border-brand-line bg-white">

@@ -27,16 +27,16 @@ import {
   type MembershipTone,
 } from "@/lib/premium/display";
 import type { PremiumAccess } from "@/lib/premium/types";
-import { pageCanonical } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = {
-  title: "Premium membership",
+export const metadata: Metadata = pageMetadata({
+  title: "Premium C1 & C2 English courses — membership and access",
   description:
-    "Premium opens the complete C1 and C2 English library. A1–B2 courses stay free. Check your membership status or see how C1/C2 access works.",
-  ...pageCanonical("/premium"),
-};
+    "Explore 240 advanced C1 and C2 lessons across seven English skills. Check membership, renewal and current enrolment availability; A1–B2 stays free.",
+  path: "/premium",
+});
 
 // Membership status and checkout availability depend on the current visitor.
 export const instant = false;

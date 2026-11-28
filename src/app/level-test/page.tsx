@@ -8,15 +8,15 @@ import { SectionHeading } from "@/components/section-heading";
 import { manualPayments } from "@/config/manual-payments";
 import { cefrLevels } from "@/data/curriculum";
 import { getCatalogCourses } from "@/lib/content/published";
-import { breadcrumbSchema, pageCanonical } from "@/lib/seo";
+import { breadcrumbSchema, pageMetadata } from "@/lib/seo";
 import { getPaymentsDisplay } from "@/lib/premium/config";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Free English Level Test — find your CEFR level in 3 minutes",
   description:
-    "A free 24-question English placement test for Urdu and Hindi speakers. Get your CEFR level from A1 to C2, see which structures you are missing, and start the right course — no sign-up needed.",
-  ...pageCanonical("/level-test"),
-};
+    "Take a free 24-question English placement test for Urdu and Hindi speakers. Get your CEFR level from A1 to C2 and find the right course — no sign-up needed.",
+  path: "/level-test",
+});
 
 export default async function LevelTestPage() {
   const catalog = await getCatalogCourses();
@@ -33,6 +33,7 @@ export default async function LevelTestPage() {
       />
 
       <SectionHeading
+        as="h1"
         eyebrow="Free level test"
         title="What is your English level, really?"
         description="Most learners either stay on beginner material for a year or jump straight into advanced lessons and get lost. Twenty-four questions will tell you which CEFR level you are actually at — A1 to C2 — and which free course to start today."

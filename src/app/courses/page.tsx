@@ -7,18 +7,27 @@ import {
   CatalogSkeleton,
   CourseCatalog,
 } from "@/components/courses/course-catalog";
+import { JsonLd } from "@/components/seo/json-ld";
 import { cefrLevels, skills } from "@/data/curriculum";
 import { getCatalogCourses } from "@/lib/content/published";
-import { pageCanonical } from "@/lib/seo";
+import {
+  breadcrumbSchema,
+  itemListSchema,
+  pageMetadata,
+} from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const catalog = await getCatalogCourses();
 
-  return {
-    title: "English courses A1–C2",
-    description: `Explore ${catalog.length} CEFR-aligned English courses across grammar, listening, speaking, pronunciation, vocabulary, reading and writing. A1–B2 are free; C1–C2 are part of Premium.`,
-    ...pageCanonical("/courses"),
-  };
+  const completeCount = catalog.filter(
+    (course) => course.contentStatus !== "preview",
+  ).length;
+
+  return pageMetadata({
+    title: "English courses A1–C2 — free and Premium",
+    description: `Explore ${catalog.length} CEFR-aligned English courses across seven skills. ${completeCount} have complete interactive lessons; A2–B2 entries are clearly labelled syllabus previews. A1–B2 are free and C1–C2 are Premium.`,
+    path: "/courses",
+  });
 }
 
 type CoursesPageProps = {
@@ -37,6 +46,15 @@ export default async function CoursesPage({
 
   return (
     <>
+      <JsonLd
+        data={[
+          itemListSchema(catalog),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Courses", path: "/courses" },
+          ]),
+        ]}
+      />
       <section className="relative overflow-hidden border-b border-brand-line bg-brand-mist">
         <div
           aria-hidden="true"

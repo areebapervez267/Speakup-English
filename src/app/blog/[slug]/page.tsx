@@ -12,7 +12,7 @@ import { resolveCourseDetail } from "@/lib/content/published";
 import {
   blogPostingSchema,
   breadcrumbSchema,
-  pageCanonical,
+  pageMetadata,
 } from "@/lib/seo";
 
 type BlogPostPageProps = {
@@ -35,18 +35,13 @@ export async function generateMetadata({
     return { title: "Article not found" };
   }
 
-  return {
+  return pageMetadata({
     title: post.title,
     description: post.description,
-    openGraph: {
-      title: post.title,
-      description: post.description,
-      type: "article",
-      publishedTime: post.date,
-      url: `/blog/${post.slug}`,
-    },
-    ...pageCanonical(`/blog/${post.slug}`),
-  };
+    path: `/blog/${post.slug}`,
+    type: "article",
+    publishedTime: post.date,
+  });
 }
 
 function formatDate(isoDate: string): string {

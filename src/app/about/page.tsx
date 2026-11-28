@@ -7,14 +7,14 @@ import { manualPayments } from "@/config/manual-payments";
 import { cefrLevels } from "@/data/curriculum";
 import { freeCourseCount, premiumCourseCount, totalCourses } from "@/data/courses";
 import { getAuthoredCourseSlugs, getLessonEntries } from "@/data/lessons";
-import { pageCanonical } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About SpeakUp English — built for Urdu and Hindi speakers",
+export const metadata: Metadata = pageMetadata({
+  title: "About — English courses for Urdu and Hindi speakers",
   description:
-    "SpeakUp English is a CEFR-aligned English course library from A1 to C2 covering seven skills, with free access to A1–B2. Meet the teacher behind it and see how the courses are built.",
-  ...pageCanonical("/about"),
-};
+    "Meet the teacher behind SpeakUp English and see how our CEFR A1–C2 curriculum, seven-skill courses and learner-first practice are built.",
+  path: "/about",
+});
 
 const authoredLessons = getAuthoredCourseSlugs().reduce(
   (total, slug) => total + getLessonEntries(slug).length,
@@ -48,7 +48,8 @@ export default function AboutPage() {
             },
             {
               term: `${freeCourseCount} free / ${premiumCourseCount} premium`,
-              detail: "Everything from A1 to B2 is free.",
+              detail:
+                "A1–B2 is free; interactive A1 and Premium C1/C2 lessons are live.",
             },
             {
               term: `${cefrLevels.length} CEFR bands`,
@@ -111,10 +112,10 @@ export default function AboutPage() {
 
       <ProseSection id="roadmap" title="What is coming next">
         <p>
-          Next on the list: more written lesson sets for B2–C2, listening
+          Next on the list: interactive lesson sets for A2–B2, listening
           transcripts with two distinct voices, and a self-update reminder for
-          premium members so nothing lapses by accident. Suggestions from learners
-          decide the order.
+          Premium members so nothing lapses by accident. Suggestions from
+          learners decide the order.
         </p>
         <p>
           Not sure where to start? Take the{" "}

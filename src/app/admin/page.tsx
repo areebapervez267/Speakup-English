@@ -335,7 +335,7 @@ export default async function AdminOverviewPage() {
               Built-in library
             </p>
             <p className="mt-2 font-display text-2xl font-medium leading-snug">
-              {builtInCourses.length} interactive A1 courses
+              {builtInCourses.length} interactive built-in courses
             </p>
             <p className="mt-2 text-sm leading-6 text-white/65">
               {importedSlugs} of {builtInCourses.length} are now in the admin
@@ -352,7 +352,7 @@ export default async function AdminOverviewPage() {
       >
         <div className="border-b border-brand-line px-5 py-4">
           <h2 className="text-lg font-bold text-brand-navy">
-            Import built-in A1 courses
+            Import built-in courses
           </h2>
           <p className="mt-1 max-w-3xl text-xs leading-6 text-brand-body">
             Importing copies the existing authored units, lessons and quizzes

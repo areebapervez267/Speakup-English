@@ -2,13 +2,17 @@ import type { MetadataRoute } from "next";
 
 import { siteUrl as baseUrl } from "@/config/site";
 import { getBlogPosts } from "@/data/blog";
-import { courses } from "@/data/courses";
-import { getPublicCourseSlugs } from "@/lib/content/published";
+import {
+  getCatalogCourses,
+  getPublicLessonParams,
+} from "@/lib/content/published";
 import { getPublicLessonSitemapEntries } from "@/lib/seo";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const slugs = await getPublicCourseSlugs();
-  const lessonRoutes = getPublicLessonSitemapEntries(courses);
+  const catalog = await getCatalogCourses();
+  const slugs = catalog.map((course) => course.slug);
+  const lessonParams = await getPublicLessonParams();
+  const lessonRoutes = getPublicLessonSitemapEntries(catalog, lessonParams);
 
   // /login and /signup carry `noindex`, so listing them here would send
   // Google mixed signals.

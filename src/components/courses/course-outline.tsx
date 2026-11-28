@@ -54,9 +54,8 @@ export function CourseOutline({
             </p>
             <p className="mt-1 text-sm leading-6 text-brand-body">
               The lesson list below shows exactly what this course will cover.
-              Interactive lesson content is available for all seven A1 courses.
-              At other levels, lessons become interactive as they are
-              published.
+              Interactive A1 lessons are available now; lessons for this level
+              become interactive as they are published.
             </p>
           </div>
         </div>

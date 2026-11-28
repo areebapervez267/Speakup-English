@@ -48,7 +48,7 @@ export default async function NewCoursePage() {
               href="/admin#import-built-in"
               className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-teal-deep underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:text-brand-navy"
             >
-              Or import a built-in A1 course
+              Or import a built-in course
               <ArrowRight className="size-3.5" aria-hidden="true" />
             </Link>
           </div>

@@ -7,10 +7,10 @@ import { freeCourseCount, premiumCourseCount } from "@/data/courses";
 import { cn } from "@/lib/utils";
 
 const freeFeatures = [
-  `Full A1–B2 course library (${freeCourseCount} courses)`,
-  "All seven skills at every level",
-  "Clear CEFR outcomes for each course",
-  "Learn at your own pace, on any device",
+  `Free A1–B2 syllabus library (${freeCourseCount} courses)`,
+  "Complete interactive A1 lessons",
+  "A2–B2 lesson libraries in progress",
+  "All seven skills mapped at every level",
 ];
 
 const premiumFeatures = [
@@ -66,8 +66,8 @@ export function PricingSection() {
             </div>
 
             <p className="mt-4 text-sm leading-6 text-brand-body">
-              Four complete CEFR levels, every core skill and a clear structure
-              from your first lesson.
+              Four free CEFR levels, with complete A1 interactive lessons and
+              clear A2–B2 syllabus previews for the next stage.
             </p>
 
             <Link

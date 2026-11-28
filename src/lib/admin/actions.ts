@@ -284,6 +284,7 @@ function revalidatePublic(slug: string) {
   revalidatePath("/");
   revalidatePath("/courses");
   revalidatePath(`/courses/${slug}`);
+  revalidatePath("/sitemap.xml");
   revalidatePath("/dashboard");
 }
 

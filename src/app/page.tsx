@@ -12,7 +12,8 @@ import { Hero } from "@/components/home/hero";
 import { LevelPath } from "@/components/home/level-path";
 import { FeaturedCourses } from "@/components/home/featured-courses";
 import { PricingSection } from "@/components/home/pricing-section";
-import { FaqSection } from "@/components/home/faq-section";
+import { FaqSection, faqs } from "@/components/home/faq-section";
+import { JsonLd } from "@/components/seo/json-ld";
 import { SectionHeading } from "@/components/section-heading";
 import { SkillIcon } from "@/components/skill-icon";
 import { buttonVariants } from "@/components/ui/button";
@@ -23,7 +24,7 @@ import {
   totalCourses,
 } from "@/data/courses";
 import { cn } from "@/lib/utils";
-import { pageCanonical } from "@/lib/seo";
+import { faqPageSchema, pageCanonical } from "@/lib/seo";
 
 export const metadata: Metadata = {
   ...pageCanonical("/"),
@@ -60,6 +61,7 @@ const methodSteps = [
 export default function Home() {
   return (
     <>
+      <JsonLd data={faqPageSchema(faqs)} />
       <Hero />
 
       <section

@@ -9,11 +9,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const faqs = [
+export const faqs = [
   {
     question: "Are the A1–B2 courses really free?",
     answer:
-      "Yes. Every A1, A2, B1 and B2 course is free to access. Premium is only required for the C1 and C2 levels, where the focus shifts to advanced precision, nuance and mastery.",
+      "Yes. A1–B2 never requires Premium. A1 already has complete interactive lessons; A2–B2 currently provide free syllabus previews while their lesson libraries are being built. Premium is only required for C1 and C2.",
   },
   {
     question: "How do I choose the right CEFR level?",
@@ -31,9 +31,9 @@ const faqs = [
       "Absolutely. Follow a single skill track such as speaking or writing, or combine all seven for a complete level. Courses at the same level are designed to support each other, so you can move between them freely.",
   },
   {
-    question: "When will the C1 and C2 courses be available?",
+    question: "Are the C1 and C2 courses available?",
     answer:
-      "C1 and C2 make up the Premium path and are being prepared for release. You can already preview the advanced course library; Premium enrolment and pricing will be announced with the advanced launch.",
+      "Yes. C1 and C2 are available as the Premium path, with 240 advanced lessons across all seven skills. You can preview every advanced syllabus; lesson access follows the membership status shown on the Premium page.",
   },
 ];
 

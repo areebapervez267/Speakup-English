@@ -10,6 +10,7 @@ export function CourseCard({ course }: { course: Course }) {
   const level = getLevel(course.level);
   const skill = getSkill(course.skill);
   const titleId = `course-${course.slug}-title`;
+  const isPreview = course.contentStatus === "preview";
 
   return (
     <article
@@ -72,7 +73,7 @@ export function CourseCard({ course }: { course: Course }) {
                 : "border border-brand-line bg-white text-brand-teal-deep",
             )}
           >
-            {course.premium ? "Premium" : "Free"}
+            {course.premium ? "Premium" : isPreview ? "Free preview" : "Free"}
           </span>
         </div>
 
@@ -112,7 +113,7 @@ export function CourseCard({ course }: { course: Course }) {
               aria-hidden="true"
               className="size-3.5 text-brand-teal-deep"
             />
-            {course.lessons} lessons
+            {course.lessons} {isPreview ? "planned lessons" : "lessons"}
           </span>
           <span className="inline-flex items-center gap-1.5">
             <Clock3

@@ -5,14 +5,14 @@ import { Mail, MessageSquare, Timer } from "lucide-react";
 import { ProsePage, ProseSection } from "@/components/site/prose-page";
 import { brand } from "@/config/brand";
 import { manualPayments } from "@/config/manual-payments";
-import { pageCanonical } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact SpeakUp English — support, payments and corrections",
+export const metadata: Metadata = pageMetadata({
+  title: "Contact — English course support and payments",
   description:
-    "Reach the SpeakUp English team by email for premium payment confirmations, account problems, certificate checks or lesson corrections. Replies within two working days.",
-  ...pageCanonical("/contact"),
-};
+    "Contact SpeakUp English for account help, Premium payment confirmations, certificate checks or lesson corrections. We reply within two working days.",
+  path: "/contact",
+});
 
 const channels = [
   {

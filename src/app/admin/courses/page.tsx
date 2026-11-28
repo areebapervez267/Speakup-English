@@ -312,7 +312,7 @@ async function CoursesContent({
           href="/admin#import-built-in"
           className="text-xs font-semibold text-brand-teal-deep underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:text-brand-navy"
         >
-          Import a built-in A1 course
+          Import a built-in course
         </Link>
       </div>
 
@@ -325,7 +325,7 @@ async function CoursesContent({
             No managed courses yet
           </h2>
           <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-brand-body">
-            Create a new draft from scratch, or import one of the built-in A1
+            Create a new draft from scratch, or import one of the built-in
             courses to start from existing content. The built-in library remains
             available until a managed version is published.
           </p>

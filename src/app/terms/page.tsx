@@ -4,14 +4,14 @@ import Link from "next/link";
 import { ProsePage, ProseSection } from "@/components/site/prose-page";
 import { brand } from "@/config/brand";
 import { manualPayments } from "@/config/manual-payments";
-import { pageCanonical } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms of Use — how to use SpeakUp English",
+export const metadata: Metadata = pageMetadata({
+  title: "Terms of Use — free and Premium accounts",
   description:
-    "The rules for free and premium accounts on SpeakUp English: your account, what you may and may not do with the lessons, refunds and contact.",
-  ...pageCanonical("/terms"),
-};
+    "The rules for free and Premium accounts on SpeakUp English: your account, lesson use, renewals, refunds and support.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

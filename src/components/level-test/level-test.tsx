@@ -163,6 +163,9 @@ export function LevelTest({ courses, priceLabel }: LevelTestProps) {
       ? courses.filter((course) => course.level === result.nextLevel).slice(0, 1)
       : [];
     const recommended = [...levelCourses, ...nextCourses];
+    const recommendedIsPreview =
+      levelCourses.length > 0 &&
+      levelCourses.every((course) => course.contentStatus === "preview");
 
     return (
       <section
@@ -243,7 +246,9 @@ export function LevelTest({ courses, priceLabel }: LevelTestProps) {
           <h3 className="text-balance text-xl font-bold tracking-[-0.015em] text-brand-navy">
             {result.level === "c1" || result.level === "c2"
               ? `You are working at ${level.label}. Here is your path.`
-              : `Start with ${level.label} — it is free.`}
+              : recommendedIsPreview
+                ? `Explore your free ${level.label} syllabus.`
+                : `Start with ${level.label} — it is free.`}
           </h3>
           <p className="mt-3 text-pretty text-sm leading-6 text-brand-body">
             {result.level === "c1" || result.level === "c2" ? (
@@ -251,6 +256,13 @@ export function LevelTest({ courses, priceLabel }: LevelTestProps) {
                 You are past the free library. The C1 and C2 courses are part of
                 Premium at <strong>{priceLabel}</strong> — and at this level you
                 will use them.
+              </>
+            ) : recommendedIsPreview ? (
+              <>
+                Your {level.label} courses are free syllabus previews. Explore
+                the planned units now; interactive lessons for this level are
+                still being built. In the meantime, keep practising with the
+                complete A1 library.
               </>
             ) : readyForNext && nextLevel ? (
               <>

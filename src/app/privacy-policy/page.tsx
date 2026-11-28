@@ -4,14 +4,14 @@ import Link from "next/link";
 import { ProsePage, ProseSection } from "@/components/site/prose-page";
 import { brand } from "@/config/brand";
 import { manualPayments } from "@/config/manual-payments";
-import { pageCanonical } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy — what SpeakUp English stores and why",
+export const metadata: Metadata = pageMetadata({
+  title: "Privacy Policy — what we store and why",
   description:
-    "How SpeakUp English collects, stores and protects your email, lesson progress and membership details. No advertising trackers, no microphone access, no audio recordings.",
-  ...pageCanonical("/privacy-policy"),
-};
+    "How SpeakUp English collects, stores and protects your email, lesson progress and membership details. No advertising trackers or audio recordings.",
+  path: "/privacy-policy",
+});
 
 export default function PrivacyPolicyPage() {
   return (

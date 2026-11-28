@@ -37,8 +37,8 @@ export function LevelPath() {
                     Free through B2
                   </p>
                   <p className="mt-1 text-sm leading-6 text-brand-body">
-                    Four complete CEFR levels at no cost. Premium unlocks the
-                    full C1 and C2 path.
+                    A1 has complete interactive lessons; A2–B2 have free
+                    syllabus previews. Premium unlocks the full C1 and C2 path.
                   </p>
                 </div>
               </div>

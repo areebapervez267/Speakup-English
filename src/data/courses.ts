@@ -15,6 +15,7 @@ export type Course = {
   lessons: number;
   hours: number;
   premium: boolean;
+  contentStatus?: "complete" | "preview";
 };
 
 type CourseSeed = [
@@ -388,6 +389,8 @@ export const courses: Course[] = cefrLevels.flatMap((level) =>
       lessons,
       hours,
       premium: level.premium,
+      contentStatus:
+        level.id === "a1" || level.premium ? "complete" : "preview",
     }),
   ),
 );

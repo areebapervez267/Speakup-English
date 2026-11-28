@@ -20,6 +20,7 @@ export const footerNav = {
     { label: "All courses", href: "/courses" },
     { label: "Free English level test", href: "/level-test" },
     { label: "Blog", href: "/blog" },
+    { label: "RSS feed", href: "/rss.xml" },
     { label: "Premium membership", href: "/premium" },
     { label: "CEFR levels", href: "/#levels" },
     { label: "Our method", href: "/#method" },
